@@ -209,9 +209,11 @@ function renderBerandaHTML(page) {
         <path d="M10,85 Q30,50 50,70 T90,60" fill="none" stroke="#ffd53d" stroke-width="3" stroke-linecap="round"/>
       </svg>
 
-      <!-- Baris Atas: Identitas Sekolah & Badge PKWU Berjajar Sejajar -->
-      <div style="width: 100%; max-width: 820px; display: flex; justify-content: space-between; align-items: center; gap: 10px; z-index: 2;">
-        <div style="display: flex; align-items: center; gap: 10px; background: rgba(255, 248, 235, 0.96); padding: 8px 14px; border-radius: 14px; border: 2.5px solid #23140c; box-shadow: 0 3px 0 #23140c; text-align: left;">
+     <!-- Baris Atas: Identitas Sekolah & Badge PKWU Seimbang & Sejajar -->
+      <div style="width: 100%; max-width: 820px; display: flex; justify-content: space-between; align-items: stretch; gap: 10px; z-index: 2;">
+        
+        <!-- Kotak Kiri: SMAN 9 Luwu Timur -->
+        <div style="flex: 1; display: flex; align-items: center; gap: 10px; background: rgba(255, 248, 235, 0.96); padding: 8px 14px; border-radius: 16px; border: 2.5px solid #23140c; box-shadow: 0 3px 0 #23140c; text-align: left; box-sizing: border-box;">
           <div style="width: 38px; height: 38px; background: #ffd53d; border: 2px solid #23140c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
             🏫
           </div>
@@ -225,9 +227,11 @@ function renderBerandaHTML(page) {
           </div>
         </div>
 
-        <div style="background: #ffd53d; color: #23140c; border: 2.5px solid #23140c; padding: 10px 14px; border-radius: 14px; font-size: 0.8rem; font-weight: 800; box-shadow: 0 3px 0 #23140c; white-space: nowrap;">
+        <!-- Kotak Kanan: PKWU Kelas X SMA (Disamakan Bentuk & Tingginya) -->
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; background: #ffd53d; color: #23140c; border: 2.5px solid #23140c; padding: 8px 14px; border-radius: 16px; font-size: 0.85rem; font-weight: 800; box-shadow: 0 3px 0 #23140c; text-align: center; box-sizing: border-box;">
           ✨ PKWU • KELAS X SMA
         </div>
+
       </div>
 
       <!-- Konten Utama Sampul -->
