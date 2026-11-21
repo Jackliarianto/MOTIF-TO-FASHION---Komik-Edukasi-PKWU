@@ -1713,3 +1713,54 @@ function handleExitApp() {
     window.location.href = "about:blank";
   }, 200);
 }
+
+// =========================================================================
+// FITUR GESER (SWIPE) LAYAR HP ANTAR HALAMAN
+// =========================================================================
+
+let touchStartX = 0;
+let touchEndX = 0;
+const minSwipeDistance = 50; // Batas minimal jarak geseran jari (dalam pixel)
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSwipeGesture();
+});
+
+function initSwipeGesture() {
+  const pageContainer = document.getElementById("pageContainer");
+  if (!pageContainer) return;
+
+  // Tangkap titik awal sentuhan jari
+  pageContainer.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  // Tangkap titik akhir saat jari dilepas
+  pageContainer.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipeGesture();
+  }, { passive: true });
+}
+
+function handleSwipeGesture() {
+  const swipeDistance = touchEndX - touchStartX;
+
+  // Jika jarak geseran kurang dari batas minimal, abaikan
+  if (Math.abs(swipeDistance) < minSwipeDistance) return;
+
+  // Geser ke kiri (Swipe Left) -> Menuju Halaman Selanjutnya
+  if (swipeDistance < 0) {
+    if (currentPageIndex < COMIC_PAGES.length - 1) {
+      goToPage(currentPageIndex + 1);
+    }
+  } 
+  // Geser ke kanan (Swipe Right) -> Menuju Halaman Sebelumnya
+  else if (swipeDistance > 0) {
+    if (currentPageIndex > 1) {
+      goToPage(currentPageIndex - 1);
+    } else if (currentPageIndex === 1) {
+      // Jika di halaman 1 dan digeser ke kanan, kembali ke beranda/sampul (Halaman 0)
+      goToPage(0);
+    }
+  }
+}
