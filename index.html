@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOTIF TO MOTIF — Komik Edukasi Prakarya & Kewirausahaan Kelas X</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="nusantara-frame">
+    <!-- HEADER UTAMA -->
+    <header class="hero-banner">
+      
+      <!-- Baris Atas: Tombol Home & Badge Mapel Berjajar ke Samping -->
+      <div class="top-header-bar">
+        <!-- Tombol Ikon Rumah Kembali ke Beranda (Halaman 11) -->
+        <button id="btnHomeFloating" class="home-floating-icon" onclick="goToPage(0)" title="Kembali ke Beranda" style="display: none;">
+          🏠
+        </button>
+
+        <!-- Teks / Badge Mapel yang Diposisikan Sejajar di Samping -->
+        <div class="badge-mapel">KOMIK EDUKASI PRAKARYA &amp; KEWIRAUSAHAAN KELAS X</div>
+      </div>
+
+      <div class="mega-mendung-overlay"></div>
+      <div class="banner-content">
+        <h1 class="main-title">MOTIF TO MOTIF</h1>
+        <p class="main-subtitle">JELAJAH KREATIVITAS RAGAM HIAS NUSANTARA</p>
+      </div>
+
+      <!-- Toolbar Fitur Cepat -->
+      <div class="top-toolbar">
+        <button id="btnDaftarHalaman" class="tool-btn" title="Daftar 11 Halaman">
+          <span>📖</span> Daftar Halaman (<span id="currentPageLabel">1</span>/10)
+        </button>
+        <button id="btnBacakanDialog" class="tool-btn tool-btn-gold" title="Bacakan Percakapan Halaman Ini">
+          <span>🔊</span> Dengarkan Dialog
+        </button>
+        <button id="btnStudioSketsa" class="tool-btn tool-btn-purple" title="Buka Studio Desain Motif">
+          <span>🎨</span> Studio Motif
+        </button>
+        <button id="btnFullscreen" class="tool-btn" title="Layar Penuh">
+          <span>⛶</span> Layar Penuh
+        </button>
+      </div>
+
+      <!-- Progress Bar Belajar -->
+      <div class="progress-wrapper">
+        <div class="progress-track">
+          <div id="progressBar" class="progress-fill" style="width: 9.09%;"></div>
+        </div>
+        <span id="progressText" class="progress-text">Halaman 1 dari 11 — Beranda</span>
+      </div>
+    </header>
+
+    <!-- KONTEN UTAMA DINAMIS (HALAMAN 1 s.d. 11) -->
+    <main id="pageContainer" class="page-container" aria-live="polite"></main>
+
+    <!-- NAVIGASI BAWAH ANTAR HALAMAN -->
+    <nav class="bottom-nav" aria-label="Navigasi Halaman Komik">
+      <button id="btnPrev" class="nav-arrow-btn" disabled>
+        <span>⬅</span> Sebelumnya
+      </button>
+
+      <div id="pageDots" class="page-dots" role="tablist"></div>
+
+      <button id="btnNext" class="nav-arrow-btn nav-arrow-next">
+        Selanjutnya <span>➡</span>
+      </button>
+    </nav>
+
+    <footer class="site-footer">
+      <p>Media Pembelajaran Interaktif <strong>Prakarya &amp; Kewirausahaan Kelas X</strong> • Tema: <em>Motif to Fashion — Ragam Hias Nusantara</em></p>
+      <p class="footer-sub">Guru SMA Pengampu: <strong>Ibu Aldriana Lobo</strong> | Siswa Kelas X: <strong>Raka, Nabila, &amp; Dimas</strong></p>
+    </footer>
+  </div>
+
+<!-- STRUKTUR POPUP MODAL PETUNJUK BELAJAR -->
+<div id="petunjukModalOverlay" class="petunjuk-modal-overlay" style="display: none;">
+  <div class="petunjuk-modal-content">
+    
+    <!-- Header Modal -->
+    <div class="petunjuk-modal-header">
+      <div class="petunjuk-modal-title-wrap">
+        <span class="petunjuk-icon-circle">❓</span>
+        <h3>Petunjuk Belajar</h3>
+      </div>
+      <button type="button" class="petunjuk-close-btn" onclick="closePetunjukModal()">×</button>
+    </div>
+
+    <!-- Body / Isi Petunjuk (Kotak-kotak Poin) -->
+    <div class="petunjuk-modal-body">
+      
+      <!-- Poin 1 -->
+      <div class="petunjuk-card green-card">
+        <span class="card-emoji">📖</span>
+        <div class="card-text">
+          <strong>Baca Cerita Berurutan:</strong> Ikuti kisah Ibu Aldriana, Raka, Nabila, dan Dimas dari Halaman 1 sampai Halaman 11.
+        </div>
+      </div>
+
+      <!-- Poin 2 -->
+      <div class="petunjuk-card blue-card">
+        <span class="card-emoji">📊</span>
+        <div class="card-text">
+          <strong>Pahami Infografis:</strong> Pelajari ringkasan filosofi ragam hias Nusantara, teknik pembuatan, hingga konsep kewirausahaan fesyen.
+        </div>
+      </div>
+
+      <!-- Poin 3 -->
+      <div class="petunjuk-card yellow-card">
+        <span class="card-emoji">🎯</span>
+        <div class="card-text">
+          <strong>Uji Pemahaman &amp; Refleksi:</strong> Kerjakan kuis interaktif, tuliskan refleksi diri, dan unggah karya fesyenmu di halaman akhir.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tombol Aksi di Bawah -->
+    <button type="button" class="petunjuk-ready-btn" onclick="closePetunjukModal()">
+      Siap Belajar! 👍
+    </button>
+
+  </div>
+</div>
+
+  <!-- MODAL 1: DAFTAR 11 HALAMAN -->
+  <div id="modalDaftarHalaman" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>📚 Peta Perjalanan Belajar</h3>
+        <button class="modal-close" data-close="modalDaftarHalaman">✕</button>
+      </div>
+      <div id="daftarHalamanGrid" class="daftar-halaman-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: DETAIL RAGAM HIAS NUSANTARA -->
+  <div id="modalMotifDetail" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="motifModalTitle">Detail Motif Nusantara</h3>
+        <button class="modal-close" data-close="modalMotifDetail">✕</button>
+      </div>
+      <div id="motifModalBody" class="motif-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: STUDIO DESAIN & SKETSA MOTIF INTERAKTIF -->
+  <div id="modalStudioSketsa" class="modal-backdrop hidden">
+    <div class="modal-card modal-card-wide">
+      <div class="modal-header">
+        <h3>🎨 Studio Desain Fesyen Ragam Hias Nusantara</h3>
+        <button class="modal-close" data-close="modalStudioSketsa">✕</button>
+      </div>
+      <div class="studio-layout">
+        <div class="studio-canvas-area">
+          <canvas id="fashionCanvas" width="380" height="420"></canvas>
+          <p class="canvas-hint">Pratinjau rancangan produk fesyen dengan motif pilihanmu</p>
+        </div>
+        <div class="studio-controls">
+          <div class="control-group">
+            <label>1. Pilih Model Produk Fesyen:</label>
+            <div class="btn-group-wrap" id="modelSelector">
+              <button class="chip-btn active" data-model="outer">Outer Kasual</button>
+              <button class="chip-btn" data-model="dress">Gaun Modern</button>
+              <button class="chip-btn" data-model="totebag">Totebag Nusantara</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label>2. Pilih Ragam Hias Nusantara:</label>
+            <div class="btn-group-wrap" id="motifSelector">
+              <button class="chip-btn active" data-motif="megamendung">Mega Mendung</button>
+              <button class="chip-btn" data-motif="parang">Batik Parang</button>
+              <button class="chip-btn" data-motif="kawung">Batik Kawung</button>
+              <button class="chip-btn" data-motif="tenun">Tenun Ikat NTT</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label>3. Pilih Warna Dasar Kain:</label>
+            <div class="color-swatches" id="colorSelector">
+              <button class="swatch-btn active" data-color="#1E3A6E" style="background:#1E3A6E" title="Biru Indigo"></button>
+              <button class="swatch-btn" data-color="#7B241C" style="background:#7B241C" title="Merah Sogan"></button>
+              <button class="swatch-btn" data-color="#4A2511" style="background:#4A2511" title="Cokelat Batik"></button>
+              <button class="swatch-btn" data-color="#1E6B4B" style="background:#1E6B4B" title="Hijau Zamrud"></button>
+              <button class="swatch-btn" data-color="#5B3A82" style="background:#5B3A82" title="Ungu Kerajaan"></button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label>4. Nama Rancanganmu:</label>
+            <input type="text" id="inputNamaDesain" class="text-input" placeholder="Contoh: Outer Mega Mendung Kasual" value="Outer Ragam Hias Nusantara" />
+          </div>
+
+          <div class="studio-actions">
+            <button id="btnDownloadDesain" class="action-btn btn-gold">⬇ Unduh Gambar Desain (PNG)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: SERTIFIKAT PENYELESAIAN TUGAS -->
+  <div id="modalSertifikat" class="modal-backdrop hidden">
+    <div class="modal-card modal-card-wide">
+      <div class="modal-header">
+        <h3>🏆 Bukti Penyelesaian &amp; Sertifikat Karya PKWU</h3>
+        <button class="modal-close" data-close="modalSertifikat">✕</button>
+      </div>
+      <div id="sertifikatContent" class="sertifikat-box"></div>
+      <div class="studio-actions" style="margin-top: 1rem;">
+        <button id="btnPrintSertifikat" class="action-btn btn-green">🖨 Cetak / Simpan PDF Sertifikat</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="illustrations.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
