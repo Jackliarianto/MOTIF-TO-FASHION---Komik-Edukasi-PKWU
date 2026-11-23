@@ -368,7 +368,7 @@ function renderComicStoryPageHTML(page) {
       const c = CHARACTERS[d.char];
       return `
         <div class="speech-bubble-item ${c.isTeacher ? "is-teacher" : ""}">
-          <!-- Avatar karakter dapat diklik untuk memunculkan pop-up profil -->
+          <!-- Avatar karakter dan tag nama kini dapat diklik untuk menampilkan profil lengkap seperti di sampul -->
           <div class="bubble-avatar" onclick="showCharacterProfile('${d.char}')" title="Klik untuk lihat profil ${c.name}" style="cursor: pointer; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">${getCharacterAvatarSVG(d.char)}</div>
           <div class="bubble-content">
             <span class="speaker-tag ${c.speakerClass}" onclick="showCharacterProfile('${d.char}')" title="Klik untuk lihat profil ${c.name}" style="cursor: pointer;">${c.name} (${c.role.split("•")[0].trim()})</span>
