@@ -368,9 +368,10 @@ function renderComicStoryPageHTML(page) {
       const c = CHARACTERS[d.char];
       return `
         <div class="speech-bubble-item ${c.isTeacher ? "is-teacher" : ""}">
-          <div class="bubble-avatar">${getCharacterAvatarSVG(d.char)}</div>
+          <!-- Avatar karakter dapat diklik untuk memunculkan pop-up profil -->
+          <div class="bubble-avatar" onclick="showCharacterProfile('${d.char}')" title="Klik untuk lihat profil ${c.name}" style="cursor: pointer; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">${getCharacterAvatarSVG(d.char)}</div>
           <div class="bubble-content">
-            <span class="speaker-tag ${c.speakerClass}">${c.name} (${c.role.split("•")[0].trim()})</span>
+            <span class="speaker-tag ${c.speakerClass}" onclick="showCharacterProfile('${d.char}')" title="Klik untuk lihat profil ${c.name}" style="cursor: pointer;">${c.name} (${c.role.split("•")[0].trim()})</span>
             <p class="bubble-text">“${d.text}”</p>
           </div>
         </div>`;
@@ -387,7 +388,7 @@ function renderComicStoryPageHTML(page) {
       
       <div style="display: flex; gap: 10px;">
         <button type="button" onclick="goToPage(0)" style="flex: 1; background: #fff8eb; color: #23140c; border: 2.5px solid #23140c; border-radius: 12px; padding: 12px; font-weight: 800; font-size: 0.92rem; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; gap: 6px;">
-          🏠 Menu Utama
+          🏠 Home
         </button>
         <button type="button" onclick="goToPage(1)" style="flex: 1; background: #ffd53d; color: #23140c; border: 2.5px solid #23140c; border-radius: 12px; padding: 12px; font-weight: 800; font-size: 0.92rem; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; gap: 6px;">
           📖 Kembali ke Komik
