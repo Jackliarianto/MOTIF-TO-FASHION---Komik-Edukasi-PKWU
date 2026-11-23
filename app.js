@@ -93,14 +93,7 @@ function goToPage(index) {
 }
 
 function renderPageDots() {
-  const dotsWrap = document.getElementById("pageDots");
-  let dotsHTML = "";
-  for (let i = 1; i < COMIC_PAGES.length; i++) {
-    const pageNum = i;
-    const isActive = currentPageIndex === i;
-    dotsHTML += `<button class="page-dot ${isActive ? "active" : ""}" onclick="goToPage(${i})" title="Halaman ${pageNum}: ${COMIC_PAGES[i].shortTitle}">${pageNum}</button>`;
-  }
-  if (dotsWrap) dotsWrap.innerHTML = dotsHTML;
+  // Fungsi ini dibiarkan kosong karena navigasi halaman bawah kini digantikan oleh renderFooterFeatureScrollbar() di footer
 }
 
 function updateNavigationState() {
@@ -113,20 +106,22 @@ function updateNavigationState() {
   
   if (heroBanner) heroBanner.style.display = isCover ? "none" : "block";
   if (bottomNav) bottomNav.style.display = isCover ? "none" : "flex";
-  if (siteFooter) siteFooter.style.display = isCover ? "none" : "block";
+  if (siteFooter) siteFooter.style.display = isCover ? "block" : "block"; // Footer diaktifkan untuk menampilkan menu fitur geser
 
   if (pageContainer) {
     pageContainer.style.padding = isCover ? "0" : "";
     pageContainer.style.maxWidth = isCover ? "100%" : "";
   }
 
-  if (isCover) return;
+  if (isCover) {
+    if (siteFooter) siteFooter.style.display = "none";
+    return;
+  }
 
   const page = COMIC_PAGES[currentPageIndex];
   const totalContentPages = 10; 
   const currentNum = currentPageIndex;
 
-  // Pembaruan Bagian 2b: Sinkronisasi label & title tooltip tombol daftar halaman
   const labelEl = document.getElementById("currentPageLabel");
   if (labelEl) labelEl.textContent = currentNum;
   
@@ -140,13 +135,81 @@ function updateNavigationState() {
 
   const percent = (currentNum / totalContentPages) * 100;
   
-  document.getElementById("progressBar").style.width = `${percent}%`;
-  document.getElementById("progressText").textContent = `Halaman ${currentNum} dari ${totalContentPages} — ${page.shortTitle}`;
+  const progressBarEl = document.getElementById("progressBar");
+  if (progressBarEl) progressBarEl.style.width = `${percent}%`;
+  
+  const progressTextEl = document.getElementById("progressText");
+  if (progressTextEl) progressTextEl.textContent = `Halaman ${currentNum} dari ${totalContentPages} — ${page.shortTitle}`;
 
-  document.querySelectorAll(".page-dot").forEach((dot, idx) => {
-    const targetPageIndex = idx + 1;
-    dot.classList.toggle("active", targetPageIndex === currentPageIndex);
+  // Render menu fitur geser di bagian footer bawah
+  renderFooterFeatureScrollbar();
+}
+
+function renderFooterFeatureScrollbar() {
+  const siteFooter = document.querySelector(".site-footer");
+  if (!siteFooter) return;
+
+  const featuresList = [
+    { page: 1, icon: "📖", label: "Pengenalan & Dialog" },
+    { page: 2, icon: "🔍", label: "Ensiklopedia Motif" },
+    { page: 3, icon: "✨", label: "Analisis & Observasi" },
+    { page: 4, icon: "👗", label: "Transformasi Desain" },
+    { page: 5, icon: "✏️", label: "Studio Sketsa" },
+    { page: 6, icon: "💰", label: "Kalkulator HPP" },
+    { page: 7, icon: "🎬", label: "Langkah & Promosi" },
+    { page: 8, icon: "⭐", label: "Kuis Kreatif" },
+    { page: 9, icon: "🏪", label: "Expo Nusantara" },
+    { page: 10, icon: "📝", label: "Tugas & Refleksi" }
+  ];
+
+  let buttonsHTML = "";
+  featuresList.forEach((item) => {
+    const isActive = currentPageIndex === item.page;
+    buttonsHTML += `
+      <button onclick="goToPage(${item.page})" title="Halaman ${item.page}: ${item.label}" style="
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: ${isActive ? '#ffd53d' : '#fff8eb'};
+        color: ${isActive ? '#142347' : '#23140c'};
+        border: 2px solid #23140c;
+        border-radius: 16px;
+        padding: 6px 12px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: ${isActive ? '0 2px 0 #23140c' : '0 3px 0 #23140c'};
+        transform: ${isActive ? 'translateY(1px)' : 'none'};
+        transition: all 0.15s ease;
+      ">
+        <span style="font-size: 0.95rem;">${item.icon}</span>
+        <span>Hal ${item.page}: ${item.label}</span>
+      </button>
+    `;
   });
+
+  siteFooter.innerHTML = `
+    <div style="width: 100%; max-width: 900px; margin: 0 auto; padding: 6px 10px; box-sizing: border-box;">
+      <div style="font-size: 0.78rem; color: #ffd53d; font-weight: 700; margin-bottom: 6px; text-align: center; font-family: 'Fredoka', sans-serif; letter-spacing: 0.5px;">
+        ✨ PILIHAN FITUR &amp; MATERI PEMBELAJARAN (GESER KANAN-KIRI) ✨
+      </div>
+      <div style="
+        display: flex; 
+        gap: 8px; 
+        overflow-x: auto; 
+        white-space: nowrap; 
+        padding: 4px 2px 8px 2px; 
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #ffd53d #142347;
+      ">
+        ${buttonsHTML}
+      </div>
+    </div>
+  `;
 }
 
 function renderDaftarHalamanModal() {
