@@ -616,89 +616,177 @@ function showMotifDetail(motifId) {
   if (!m) return;
   document.getElementById("motifModalTitle").textContent = `${m.name} (${m.origin})`;
 
-  // Membuat wadah animasi interaktif bergerak untuk keempat filosofi motif
+  // --- WADAH VISUAL ANIMASI YANG LEBIH HIDUP ---
   let animatedVisualHTML = "";
+
+  // 1. MEGA MENDUNG (Animasi Awan Bertingkat & Transparan)
   if (motifId === "megamendung") {
     animatedVisualHTML = `
-      <div style="position:relative; width:100%; height:160px; background:linear-gradient(135deg, #142347, #1b3163); border-radius:12px; overflow:hidden; border:3px solid #23140c; display:flex; align-items:center; justify-content:center;">
-        <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none">
-          <g>
-            <path d="M-50,120 Q50,70 150,120 T350,120 T550,120 L550,160 L-50,160 Z" fill="rgba(255,255,255,0.1)">
-              <animate attributeName="d" dur="6s" repeatCount="indefinite" values="M-50,120 Q50,70 150,120 T350,120 T550,120 L550,160 L-50,160 Z; M-50,120 Q50,140 150,120 T350,100 T550,120 L550,160 L-50,160 Z; M-50,120 Q50,70 150,120 T350,120 T550,120 L550,160 L-50,160 Z"/>
+      <div style="position:relative; width:100%; height:180px; background:linear-gradient(180deg, #142347, #6eb6ff, #142347); border-radius:14px; overflow:hidden; border:4px solid #23140c; box-shadow: inset 0 0 20px rgba(35, 20, 12, 0.5);">
+        <svg width="100%" height="100%" viewBox="0 0 500 180" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#e0f7fa" stop-opacity="0.5"/>
+            </linearGradient>
+            <!-- Filter Cahaya Berkilau -->
+            <filter id="shine">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <g filter="url(#shine)">
+            <!-- Awan Belakang (Lembut & Mengalir) -->
+            <path d="M-100,90 Q0,40 100,90 T300,90 T500,90 L500,180 L-100,180 Z" fill="url(#cloudGrad)" opacity="0.6">
+              <animate attributeName="d" dur="10s" repeatCount="indefinite" values="M-100,90 Q0,40 100,90 T300,90 T500,90 L500,180 L-100,180 Z; M-100,90 Q0,140 100,90 T300,40 T500,90 L500,180 L-100,180 Z; M-100,90 Q0,40 100,90 T300,90 T500,90 L500,180 L-100,180 Z"/>
             </path>
-            <!-- Lapisan Awan Megamendung Animasi -->
-            <path d="M40,110 Q70,70 110,95 Q140,65 190,95 Q230,70 270,110 Z" fill="#6eb6ff" opacity="0.8" stroke="#ffffff" stroke-width="2">
-              <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="-20,0; 20,0; -20,0"/>
+            <!-- Awan Depan Utama (Lebih Tegas & Cepat) -->
+            <path d="M20,120 C50,80 100,110 150,90 C200,70 250,100 300,90 C350,80 400,110 450,90 C480,80 500,90 500,90 L500,160 L20,160 Z" fill="#ffffff" opacity="0.9">
+              <animateTransform attributeName="transform" type="translate" dur="7s" repeatCount="indefinite" values="-60,0; 0,0; -60,0"/>
+              <animate attributeName="d" dur="7s" repeatCount="indefinite" values="M20,120 C50,80 100,110 150,90 C200,70 250,100 300,90 C350,80 400,110 450,90 C480,80 500,90 500,90 L500,160 L20,160 Z; M20,120 C50,160 100,90 150,110 C200,130 250,80 300,110 C350,130 400,90 450,110 C480,120 500,110 500,110 L500,160 L20,160 Z; M20,120 C50,80 100,110 150,90 C200,70 250,100 300,90 C350,80 400,110 450,90 C480,80 500,90 500,90 L500,160 L20,160 Z"/>
             </path>
-            <path d="M120,130 Q150,90 190,115 Q220,85 270,115 Q310,90 350,130 Z" fill="#ffd53d" opacity="0.85" stroke="#ffffff" stroke-width="2">
-              <animateTransform attributeName="transform" type="translate" dur="5s" repeatCount="indefinite" values="15,0; -15,0; 15,0"/>
-            </path>
-          </g>
-        </svg>
-        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.8); color:#ffd53d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">
-          ☁️ Animasi Awan Pembawa Kesejukan
-        </div>
-      </div>`;
-  } else if (motifId === "parang") {
-    animatedVisualHTML = `
-      <div style="position:relative; width:100%; height:160px; background:linear-gradient(135deg, #8f291c, #5c1810); border-radius:12px; overflow:hidden; border:3px solid #23140c; display:flex; align-items:center; justify-content:center;">
-        <svg width="100%" height="100%" viewBox="0 0 400 160">
-          <g>
-            <path d="M-50,20 L450,140" stroke="#ffd53d" stroke-width="25" stroke-linecap="round" opacity="0.9">
-              <animateTransform attributeName="transform" type="translate" dur="3s" repeatCount="indefinite" values="0,0; 20,-10; 0,0"/>
-            </path>
-            <path d="M-50,80 L450,200" stroke="#ffffff" stroke-width="15" stroke-linecap="round" opacity="0.7">
-              <animateTransform attributeName="transform" type="translate" dur="3s" repeatCount="indefinite" values="0,0; -15,10; 0,0"/>
-            </path>
-          </g>
-        </svg>
-        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.8); color:#ffd53d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">
-          🗡️ Animasi Gelombang Semangat Pantang Menyerah
-        </div>
-      </div>`;
-  } else if (motifId === "kawung") {
-    animatedVisualHTML = `
-      <div style="position:relative; width:100%; height:160px; background:linear-gradient(135deg, #23140c, #4a3525); border-radius:12px; overflow:hidden; border:3px solid #23140c; display:flex; align-items:center; justify-content:center;">
-        <svg width="100%" height="100%" viewBox="0 0 400 160">
-          <g transform="translate(200, 80)">
-            <circle r="50" fill="#ffd53d" opacity="0.9">
-              <animate attributeName="r" dur="2.5s" repeatCount="indefinite" values="45; 55; 45"/>
+            <!-- Aksen Kilau Emas -->
+            <circle cx="420" cy="50" r="8" fill="#ffd53d" opacity="1">
+              <animate attributeName="r" dur="2.5s" repeatCount="indefinite" values="4; 8; 4"/>
+              <animate attributeName="opacity" dur="2.5s" repeatCount="indefinite" values="0.3; 1; 0.3"/>
             </circle>
-            <ellipse rx="35" ry="18" fill="#8f291c" transform="rotate(0)">
-              <animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite" values="0; 360"/>
-            </ellipse>
-            <ellipse rx="35" ry="18" fill="#148348" transform="rotate(90)">
-              <animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite" values="90; 450"/>
-            </ellipse>
-            <circle r="12" fill="#ffffff"/>
           </g>
         </svg>
-        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.8); color:#ffd53d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">
-          ⚪ Animasi Kesucian &amp; Pengendalian Diri
+        <div style="position:absolute; bottom:8px; left:12px; background:rgba(255,255,255,0.9); color:#8f291c; padding:4px 10px; border-radius:18px; font-size:0.8rem; font-weight:800; border: 2.5px solid #23140c; box-shadow: 0 3px 0 #23140c;">
+          ☁️ Awan Mega Mendung: Kesejukan &amp; Kesabaran
         </div>
       </div>`;
-  } else {
+  }
+
+  // 2. PARANG (Animasi Gelombang 3D Dinamis)
+  else if (motifId === "parang") {
     animatedVisualHTML = `
-      <div style="position:relative; width:100%; height:160px; background:linear-gradient(135deg, #148348, #0d562f); border-radius:12px; overflow:hidden; border:3px solid #23140c; display:flex; align-items:center; justify-content:center;">
-        <svg width="100%" height="100%" viewBox="0 0 400 160">
-          <g>
-            <polygon points="50,-20 100,80 0,80" fill="#ffd53d" opacity="0.8">
-              <animateTransform attributeName="transform" type="translate" dur="3.5s" repeatCount="indefinite" values="0,0; 50,20; 0,0"/>
-            </polygon>
-            <polygon points="250,80 350,80 300,180" fill="#ffffff" opacity="0.7">
-              <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="0,0; -40,-20; 0,0"/>
-            </polygon>
+      <div style="position:relative; width:100%; height:180px; background:linear-gradient(135deg, #5c1810, #b71c1c, #8f291c); border-radius:14px; overflow:hidden; border:4px solid #23140c; box-shadow: inset 0 0 20px rgba(35, 20, 12, 0.6);">
+        <svg width="100%" height="100%" viewBox="0 0 400 180">
+          <defs>
+            <linearGradient id="parangGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ffd53d" stop-opacity="1"/>
+              <stop offset="50%" stop-color="#ffffff" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#ffd53d" stop-opacity="1"/>
+            </linearGradient>
+            <!-- Filter Bayangan Timbul -->
+            <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+              <feOffset result="offOut" in="SourceAlpha" dx="2" dy="2" />
+              <feGaussianBlur result="blurOut" in="offOut" stdDeviation="2" />
+              <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+            </filter>
+          </defs>
+          <g filter="url(#dropShadow)">
+            <!-- Gelombang Parang Utama (Bergeser & Menggeliat) -->
+            <path d="M-100,100 Q-50,50 0,100 T100,100 T200,100 T300,100 T400,100 T500,100" fill="none" stroke="url(#parangGrad)" stroke-width="35" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="0,0; 100,0; 0,0"/>
+              <animate attributeName="d" dur="4s" repeatCount="indefinite" values="M-100,100 Q-50,50 0,100 T100,100 T200,100 T300,100 T400,100 T500,100; M-100,100 Q-50,150 0,100 T100,50 T200,100 T300,150 T400,100 T500,50; M-100,100 Q-50,50 0,100 T100,100 T200,100 T300,100 T400,100 T500,100"/>
+            </path>
+            <!-- Gelombang Parang Kedua (Offset) -->
+            <path d="M-100,140 Q-50,90 0,140 T100,140 T200,140 T300,140 T400,140 T500,140" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" opacity="0.8">
+              <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="0,0; -100,0; 0,0" begin="-1s"/>
+            </path>
           </g>
         </svg>
-        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.8); color:#ffd53d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">
-          🧵 Animasi Proses Tenun &amp; Kerja Keras
+        <div style="position:absolute; bottom:8px; left:12px; background:rgba(255,255,255,0.9); color:#8f291c; padding:4px 10px; border-radius:18px; font-size:0.8rem; font-weight:800; border: 2.5px solid #23140c; box-shadow: 0 3px 0 #23140c;">
+          🗡️ Parang: Semangat Pantang Menyerah
+        </div>
+      </div>`;
+  }
+
+  // 3. KAWUNG (Animasi Rotasi Spiral Ganda)
+  else if (motifId === "kawung") {
+    animatedVisualHTML = `
+      <div style="position:relative; width:100%; height:180px; background:linear-gradient(135deg, #4a3525, #fdf6e3, #4a3525); border-radius:14px; overflow:hidden; border:4px solid #23140c; box-shadow: inset 0 0 25px rgba(35, 20, 12, 0.5);">
+        <svg width="100%" height="100%" viewBox="0 0 400 180">
+          <defs>
+            <!-- Filter Cahaya Bersinar (Glow) -->
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="glow"/>
+              <feMerge>
+                <feMergeNode in="glow"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <g transform="translate(200, 90)" filter="url(#glow)">
+            <!-- Lingkaran Luar (Pulsing / Denyut) -->
+            <circle r="60" fill="none" stroke="#8f291c" stroke-width="3" stroke-dasharray="6 6" opacity="0.5">
+              <animate attributeName="r" dur="3s" repeatCount="indefinite" values="58; 64; 58"/>
+            </circle>
+            <!-- Empat Kelopak Utama (Rotasi Spiral Dinamis) -->
+            <g>
+              <ellipse rx="45" ry="22" fill="#ffd53d" opacity="0.9" transform="rotate(0)">
+                <animateTransform attributeName="transform" type="rotate" dur="5s" repeatCount="indefinite" from="0 0 0" to="360 0 0"/>
+              </ellipse>
+              <ellipse rx="45" ry="22" fill="#148348" opacity="0.9" transform="rotate(90)">
+                <animateTransform attributeName="transform" type="rotate" dur="5s" repeatCount="indefinite" from="90 0 0" to="450 0 0"/>
+              </ellipse>
+              <ellipse rx="45" ry="22" fill="#ffd53d" opacity="0.9" transform="rotate(180)">
+                <animateTransform attributeName="transform" type="rotate" dur="5s" repeatCount="indefinite" from="180 0 0" to="540 0 0"/>
+              </ellipse>
+              <ellipse rx="45" ry="22" fill="#148348" opacity="0.9" transform="rotate(270)">
+                <animateTransform attributeName="transform" type="rotate" dur="5s" repeatCount="indefinite" from="270 0 0" to="630 0 0"/>
+              </ellipse>
+            </g>
+            <!-- Inti Pusat (Berkilau) -->
+            <circle r="15" fill="#8f291c">
+              <animate attributeName="r" dur="1.5s" repeatCount="indefinite" values="14; 17; 14"/>
+            </circle>
+          </g>
+        </svg>
+        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.9); color:#ffd53d; padding:4px 10px; border-radius:18px; font-size:0.8rem; font-weight:800; border: 2.5px solid #23140c; box-shadow: 0 3px 0 #23140c;">
+          ⚪ Kawung: Kesucian &amp; Pengendalian Diri
+        </div>
+      </div>`;
+  }
+
+  // 4. TENUN IKAT (Animasi Tenun Berkilau & Dinamis)
+  else {
+    animatedVisualHTML = `
+      <div style="position:relative; width:100%; height:180px; background:linear-gradient(135deg, #0d562f, #eefbf3, #148348); border-radius:14px; overflow:hidden; border:4px solid #23140c; box-shadow: inset 0 0 20px rgba(13, 86, 47, 0.5);">
+        <svg width="100%" height="100%" viewBox="0 0 400 180">
+          <defs>
+            <linearGradient id="tenunGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ffd53d" stop-opacity="0.7"/>
+              <stop offset="50%" stop-color="#ffffff" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#ffd53d" stop-opacity="0.7"/>
+            </linearGradient>
+          </defs>
+          <g>
+            <!-- Benang Lintang Animasi (Efek Alat Tenun Beroperasi) -->
+            <rect x="0" y="0" width="400" height="180" fill="url(#tenunGrad)">
+              <animate attributeName="opacity" dur="1.5s" repeatCount="indefinite" values="0.5; 1; 0.5"/>
+            </rect>
+            <!-- Pola Geometris Kain Tenun (Bergeser & Berkilau) -->
+            <g>
+              <polygon points="50,-50 100,90 0,90" fill="#ffd53d" opacity="0.9">
+                 <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="0,0; 60,30; 0,0"/>
+              </polygon>
+              <polygon points="350,90 450,90 400,220" fill="#ffffff" opacity="0.8">
+                 <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="0,0; -50,-30; 0,0" begin="-1s"/>
+              </polygon>
+               <polygon points="200,160 270,160 235,60" fill="#8f291c" opacity="0.7">
+                 <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="0,0; 0,-40; 0,0" begin="-2s"/>
+              </polygon>
+            </g>
+            <!-- Garis Tenun Halus -->
+            <line x1="0" y1="90" x2="400" y2="90" stroke="#23140c" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+             <line x1="200" y1="0" x2="200" y2="180" stroke="#23140c" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+          </g>
+        </svg>
+        <div style="position:absolute; bottom:8px; left:12px; background:rgba(255,255,255,0.9); color:#8f291c; padding:4px 10px; border-radius:18px; font-size:0.8rem; font-weight:800; border: 2.5px solid #23140c; box-shadow: 0 3px 0 #23140c;">
+          🧵 Tenun Ikat: Proses Panjang &amp; Kerja Keras
         </div>
       </div>`;
   }
 
   document.getElementById("motifModalBody").innerHTML = `
     ${animatedVisualHTML}
-    <div style="margin-top: 12px;">
+    <div style="margin-top: 14px; font-family: 'Nunito', sans-serif; color: #23140c; line-height: 1.5;">
       <p style="margin-bottom:8px;"><strong>Asal Daerah:</strong> ${m.origin}</p>
       <p style="margin-bottom:8px;"><strong>Karakteristik Warna:</strong> ${m.colors}</p>
       <p style="margin-bottom:8px;"><strong>Makna &amp; Filosofi:</strong> ${m.philosophy}</p>
@@ -706,7 +794,7 @@ function showMotifDetail(motifId) {
       <button class="action-btn btn-gold" onclick="selectedFavoriteMotif='${m.name} (${m.origin})'; closeModal('modalMotifDetail'); alert('Motif ${m.name} dipilih sebagai inspirasi desainmu!');">⭐ Jadikan Inspirasi Desainku</button>
     </div>
   `;
-  openModal("modalMotifDetail");
+  openModal("motifModalDetail");
 }
 
 function toggleObservation(key, val) {
