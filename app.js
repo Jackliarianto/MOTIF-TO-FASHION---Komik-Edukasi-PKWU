@@ -615,15 +615,96 @@ function showMotifDetail(motifId) {
   const m = MOTIF_ENCYCLOPEDIA.find((item) => item.id === motifId);
   if (!m) return;
   document.getElementById("motifModalTitle").textContent = `${m.name} (${m.origin})`;
+
+  // Membuat wadah animasi interaktif bergerak untuk keempat filosofi motif
+  let animatedVisualHTML = "";
+  if (motifId === "megamendung") {
+    animatedVisualHTML = `
+      <div style="position:relative; width:100%; height:160px; background:linear-gradient(135deg, #142347, #1b3163); border-radius:12px; overflow:hidden; border:3px solid #23140c; display:flex; align-items:center; justify-content:center;">
+        <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none">
+          <g>
+            <path d="M-50,120 Q50,70 150,120 T350,120 T550,120 L550,160 L-50,160 Z" fill="rgba(255,255,255,0.1)">
+              <animate attributeName="d" dur="6s" repeatCount="indefinite" values="M-50,120 Q50,70 150,120 T350,120 T550,120 L550,160 L-50,160 Z; M-50,120 Q50,140 150,120 T350,100 T550,120 L550,160 L-50,160 Z; M-50,120 Q50,70 150,120 T350,120 T550,120 L550,160 L-50,160 Z"/>
+            </path>
+            <!-- Lapisan Awan Megamendung Animasi -->
+            <path d="M40,110 Q70,70 110,95 Q140,65 190,95 Q230,70 270,110 Z" fill="#6eb6ff" opacity="0.8" stroke="#ffffff" stroke-width="2">
+              <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="-20,0; 20,0; -20,0"/>
+            </path>
+            <path d="M120,130 Q150,90 190,115 Q220,85 270,115 Q310,90 350,130 Z" fill="#ffd53d" opacity="0.85" stroke="#ffffff" stroke-width="2">
+              <animateTransform attributeName="transform" type="translate" dur="5s" repeatCount="indefinite" values="15,0; -15,0; 15,0"/>
+            </path>
+          </g>
+        </svg>
+        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.8); color:#ffd53d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">
+          ☁️ Animasi Awan Pembawa Kesejukan
+        </div>
+      </div>`;
+  } else if (motifId === "parang") {
+    animatedVisualHTML = `
+      <div style="position:relative; width:100%; height:160px; background:linear-gradient(135deg, #8f291c, #5c1810); border-radius:12px; overflow:hidden; border:3px solid #23140c; display:flex; align-items:center; justify-content:center;">
+        <svg width="100%" height="100%" viewBox="0 0 400 160">
+          <g>
+            <path d="M-50,20 L450,140" stroke="#ffd53d" stroke-width="25" stroke-linecap="round" opacity="0.9">
+              <animateTransform attributeName="transform" type="translate" dur="3s" repeatCount="indefinite" values="0,0; 20,-10; 0,0"/>
+            </path>
+            <path d="M-50,80 L450,200" stroke="#ffffff" stroke-width="15" stroke-linecap="round" opacity="0.7">
+              <animateTransform attributeName="transform" type="translate" dur="3s" repeatCount="indefinite" values="0,0; -15,10; 0,0"/>
+            </path>
+          </g>
+        </svg>
+        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.8); color:#ffd53d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">
+          🗡️ Animasi Gelombang Semangat Pantang Menyerah
+        </div>
+      </div>`;
+  } else if (motifId === "kawung") {
+    animatedVisualHTML = `
+      <div style="position:relative; width:100%; height:160px; background:linear-gradient(135deg, #23140c, #4a3525); border-radius:12px; overflow:hidden; border:3px solid #23140c; display:flex; align-items:center; justify-content:center;">
+        <svg width="100%" height="100%" viewBox="0 0 400 160">
+          <g transform="translate(200, 80)">
+            <circle r="50" fill="#ffd53d" opacity="0.9">
+              <animate attributeName="r" dur="2.5s" repeatCount="indefinite" values="45; 55; 45"/>
+            </circle>
+            <ellipse rx="35" ry="18" fill="#8f291c" transform="rotate(0)">
+              <animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite" values="0; 360"/>
+            </ellipse>
+            <ellipse rx="35" ry="18" fill="#148348" transform="rotate(90)">
+              <animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite" values="90; 450"/>
+            </ellipse>
+            <circle r="12" fill="#ffffff"/>
+          </g>
+        </svg>
+        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.8); color:#ffd53d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">
+          ⚪ Animasi Kesucian &amp; Pengendalian Diri
+        </div>
+      </div>`;
+  } else {
+    animatedVisualHTML = `
+      <div style="position:relative; width:100%; height:160px; background:linear-gradient(135deg, #148348, #0d562f); border-radius:12px; overflow:hidden; border:3px solid #23140c; display:flex; align-items:center; justify-content:center;">
+        <svg width="100%" height="100%" viewBox="0 0 400 160">
+          <g>
+            <polygon points="50,-20 100,80 0,80" fill="#ffd53d" opacity="0.8">
+              <animateTransform attributeName="transform" type="translate" dur="3.5s" repeatCount="indefinite" values="0,0; 50,20; 0,0"/>
+            </polygon>
+            <polygon points="250,80 350,80 300,180" fill="#ffffff" opacity="0.7">
+              <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite" values="0,0; -40,-20; 0,0"/>
+            </polygon>
+          </g>
+        </svg>
+        <div style="position:absolute; bottom:8px; left:12px; background:rgba(35,20,12,0.8); color:#ffd53d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">
+          🧵 Animasi Proses Tenun &amp; Kerja Keras
+        </div>
+      </div>`;
+  }
+
   document.getElementById("motifModalBody").innerHTML = `
-    <div style="height:150px;border-radius:12px;overflow:hidden;border:3px solid #23140c;margin-bottom:12px;">
-      ${getMotifPatternSVG(m.id, "modal-" + m.id)}
+    ${animatedVisualHTML}
+    <div style="margin-top: 12px;">
+      <p style="margin-bottom:8px;"><strong>Asal Daerah:</strong> ${m.origin}</p>
+      <p style="margin-bottom:8px;"><strong>Karakteristik Warna:</strong> ${m.colors}</p>
+      <p style="margin-bottom:8px;"><strong>Makna &amp; Filosofi:</strong> ${m.philosophy}</p>
+      <p style="margin-bottom:14px;"><strong>Rekomendasi Ide Fesyen:</strong> ${m.fashionIdea}</p>
+      <button class="action-btn btn-gold" onclick="selectedFavoriteMotif='${m.name} (${m.origin})'; closeModal('modalMotifDetail'); alert('Motif ${m.name} dipilih sebagai inspirasi desainmu!');">⭐ Jadikan Inspirasi Desainku</button>
     </div>
-    <p style="margin-bottom:8px;"><strong>Asal Daerah:</strong> ${m.origin}</p>
-    <p style="margin-bottom:8px;"><strong>Karakteristik Warna:</strong> ${m.colors}</p>
-    <p style="margin-bottom:8px;"><strong>Makna &amp; Filosofi:</strong> ${m.philosophy}</p>
-    <p style="margin-bottom:14px;"><strong>Rekomendasi Ide Fesyen:</strong> ${m.fashionIdea}</p>
-    <button class="action-btn btn-gold" onclick="selectedFavoriteMotif='${m.name} (${m.origin})'; closeModal('modalMotifDetail'); alert('Motif ${m.name} dipilih sebagai inspirasi desainmu!');">⭐ Jadikan Inspirasi Desainku</button>
   `;
   openModal("modalMotifDetail");
 }
