@@ -2556,3 +2556,20 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+// footer
+.site-footer::-webkit-scrollbar,
+.site-footer div::-webkit-scrollbar {
+  height: 6px;
+}
+.site-footer::-webkit-scrollbar-track,
+.site-footer div::-webkit-scrollbar-track {
+  background: #142347;
+  border-radius: 10px;
+}
+.site-footer::-webkit-scrollbar-thumb,
+.site-footer div::-webkit-scrollbar-thumb {
+  background: #ffd53d;
+  border-radius: 10px;
+  border: 1px solid #23140c;
+}
