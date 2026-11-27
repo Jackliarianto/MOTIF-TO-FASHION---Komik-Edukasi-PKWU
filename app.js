@@ -157,7 +157,6 @@ function renderFooterFeatureScrollbar() {
   siteFooter.style.boxShadow = "0 -4px 12px rgba(0,0,0,0.3)";
   siteFooter.style.padding = "6px 0";
 
-  // CSS Animasi & Popup Radial Melingkar ala MoneyTracking
   if (!document.getElementById("footerRadialStyle")) {
     const styleEl = document.createElement("style");
     styleEl.id = "footerRadialStyle";
@@ -180,45 +179,45 @@ function renderFooterFeatureScrollbar() {
     const popupHTML = `
       <div id="footerFeaturePopup" style="
         position: fixed;
-        bottom: 78px;
-        left: 28px;
-        width: 190px;
-        height: 190px;
+        bottom: 60px;
+        left: 14px;
+        width: 170px;
+        height: 170px;
         display: none;
         pointer-events: none;
         z-index: 9999;
       ">
         <!-- Tombol 1: Daftar Halaman (Atas) -->
-        <div class="radial-menu-item" style="top: 0px; left: 70px; pointer-events: auto;">
+        <div class="radial-menu-item" style="top: 0px; left: 60px; pointer-events: auto;">
           <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); toggleFooterFeaturePopup();" title="Daftar Halaman" style="
-            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             📖
           </button>
         </div>
 
         <!-- Tombol 2: Putar Suara (Kiri) -->
-        <div class="radial-menu-item" style="top: 70px; left: 0px; pointer-events: auto;">
+        <div class="radial-menu-item" style="top: 60px; left: 0px; pointer-events: auto;">
           <button type="button" onclick="speakCurrentPageDialogues(); toggleFooterFeaturePopup();" title="Putar Suara" style="
-            background: #ffd53d; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+            background: #ffd53d; border: 2.5px solid #23140c; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             🔊
           </button>
         </div>
 
         <!-- Tombol 3: Studio Sketsa (Kanan) -->
-        <div class="radial-menu-item" style="top: 70px; left: 140px; pointer-events: auto;">
+        <div class="radial-menu-item" style="top: 60px; left: 120px; pointer-events: auto;">
           <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); toggleFooterFeaturePopup();" title="Studio Sketsa Fesyen" style="
-            background: #5b3a82; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+            background: #5b3a82; border: 2.5px solid #23140c; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             🎨
           </button>
         </div>
 
-        <!-- Tombol 4: Fullscreen (Bawah/Serong Kanan) -->
-        <div class="radial-menu-item" style="top: 135px; left: 70px; pointer-events: auto;">
+        <!-- Tombol 4: Fullscreen (Serong Kanan Bawah) -->
+        <div class="radial-menu-item" style="top: 120px; left: 60px; pointer-events: auto;">
           <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} toggleFooterFeaturePopup();" title="Layar Penuh (Fullscreen)" style="
-            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             ⛶
           </button>
@@ -230,7 +229,6 @@ function renderFooterFeatureScrollbar() {
 
   const isPopupOpen = document.getElementById("footerFeaturePopup")?.style.display === "block";
 
-  // Tombol Plus (+) utama yang berubah menjadi tombol silang (×) pink saat dibuka
   const plusActionBtn = `
     <button type="button" onclick="toggleFooterFeaturePopup()" title="Menu Fitur Utama" style="
       flex: 0 0 auto;
@@ -243,7 +241,7 @@ function renderFooterFeatureScrollbar() {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: ${isPopupOpen ? '1.4rem' : '1.4rem'};
+      font-size: 1.4rem;
       font-weight: 900;
       cursor: pointer;
       box-shadow: 0 3px 0 #23140c;
