@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
   bindGlobalEvents();
   initFashionStudio();
   ensureRangkumanModalInDOM();
-  ensureFloatingBottomNavDOM();
 });
 
 function bindGlobalEvents() {
@@ -94,7 +93,7 @@ function goToPage(index) {
 }
 
 function renderPageDots() {
-  // Fungsi ini dibiarkan kosong karena navigasi bawah menggunakan floating bottom nav
+  // Fungsi ini dibiarkan kosong karena navigasi halaman bawah kini digantikan oleh renderFooterFeatureScrollbar() di footer
 }
 
 function updateNavigationState() {
@@ -107,7 +106,7 @@ function updateNavigationState() {
   
   if (heroBanner) heroBanner.style.display = isCover ? "none" : "block";
   if (bottomNav) bottomNav.style.display = isCover ? "none" : "flex";
-  if (siteFooter) siteFooter.style.display = isCover ? "none" : "block";
+  if (siteFooter) siteFooter.style.display = isCover ? "block" : "block"; // Footer diaktifkan untuk menampilkan menu fitur geser
 
   if (pageContainer) {
     pageContainer.style.padding = isCover ? "0" : "";
@@ -116,7 +115,6 @@ function updateNavigationState() {
 
   if (isCover) {
     if (siteFooter) siteFooter.style.display = "none";
-    closeFloatingMenuPopup();
     return;
   }
 
@@ -143,104 +141,15 @@ function updateNavigationState() {
   const progressTextEl = document.getElementById("progressText");
   if (progressTextEl) progressTextEl.textContent = `Halaman ${currentNum} dari ${totalContentPages} — ${page.shortTitle}`;
 
-  // Perbarui tampilan active state pada floating bottom nav
+  // Render menu fitur geser di bagian footer bawah
   renderFooterFeatureScrollbar();
 }
 
-function ensureFloatingBottomNavDOM() {
-  if (document.getElementById("floatingAppBottomNav")) return;
-
-  const navHTML = `
-    <div id="floatingMenuPopup" style="
-      position: fixed;
-      bottom: 82px;
-      right: 16px;
-      width: 260px;
-      background: #fff8eb;
-      border: 3px solid #23140c;
-      border-radius: 18px;
-      box-shadow: 0 6px 0 #23140c, 0 12px 24px rgba(0,0,0,0.3);
-      padding: 14px;
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      z-index: 9999;
-      font-family: 'Nunito', sans-serif;
-    ">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #d4a36a; padding-bottom: 6px; margin-bottom: 2px;">
-        <span style="font-family: 'Fredoka', sans-serif; font-size: 0.95rem; font-weight: 700; color: #142347;">✨ Menu Utama &amp; Fitur</span>
-        <button type="button" onclick="closeFloatingMenuPopup()" style="background: #ffebee; color: #b71c1c; border: 2px solid #23140c; border-radius: 50%; width: 24px; height: 24px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">×</button>
-      </div>
-      <button type="button" onclick="goToPage(0); closeFloatingMenuPopup();" style="background: #ffffff; border: 2px solid #23140c; border-radius: 12px; padding: 8px 12px; text-align: left; font-weight: 800; font-size: 0.85rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
-        <span>🏠</span> <span>Kembali ke Sampul (Home)</span>
-      </button>
-      <button type="button" onclick="openPetunjukModal(); closeFloatingMenuPopup();" style="background: #ffffff; border: 2px solid #23140c; border-radius: 12px; padding: 8px 12px; text-align: left; font-weight: 800; font-size: 0.85rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
-        <span>❓</span> <span>Petunjuk Belajar</span>
-      </button>
-      <button type="button" onclick="openRangkumanModal(); closeFloatingMenuPopup();" style="background: #ffffff; border: 2px solid #23140c; border-radius: 12px; padding: 8px 12px; text-align: left; font-weight: 800; font-size: 0.85rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
-        <span>📑</span> <span>Infografis / Rangkuman</span>
-      </button>
-      <button type="button" onclick="openModal('modalStudioSketsa'); closeFloatingMenuPopup(); drawFashionCanvas();" style="background: #ffffff; border: 2px solid #23140c; border-radius: 12px; padding: 8px 12px; text-align: left; font-weight: 800; font-size: 0.85rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
-        <span>🎨</span> <span>Studio Sketsa Fesyen</span>
-      </button>
-    </div>
-
-    <div id="floatingAppBottomNav" class="site-footer" style="
-      position: fixed;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 92%;
-      max-width: 520px;
-      background: rgba(35, 20, 12, 0.95);
-      backdrop-filter: blur(8px);
-      border: 3.5px solid #23140c;
-      border-radius: 28px;
-      box-shadow: 0 6px 0 rgba(0,0,0,0.4), 0 10px 20px rgba(0,0,0,0.3);
-      padding: 6px 12px;
-      z-index: 998;
-      display: none;
-      box-sizing: border-box;
-    ">
-      <div id="floatingNavScrollBox" style="
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-        overflow-x: auto;
-        white-space: nowrap;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        padding: 2px;
-      ">
-        <!-- Render tombol navigasi via JS -->
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML("beforeend", navHTML);
-}
-
-function toggleFloatingMenuPopup() {
-  const popup = document.getElementById("floatingMenuPopup");
-  if (!popup) return;
-  if (popup.style.display === "flex") {
-    popup.style.display = "none";
-  } else {
-    popup.style.display = "flex";
-  }
-}
-
-function closeFloatingMenuPopup() {
-  const popup = document.getElementById("floatingMenuPopup");
-  if (popup) popup.style.display = "none";
-}
-
 function renderFooterFeatureScrollbar() {
-  ensureFloatingBottomNavDOM();
-  const navBox = document.getElementById("floatingNavScrollBox");
-  if (!navBox) return;
+  const siteFooter = document.querySelector(".site-footer");
+  if (!siteFooter) return;
 
-  const quickNavItems = [
+  const featuresList = [
     { page: 1, icon: "📖", label: "Dialog" },
     { page: 2, icon: "🔍", label: "Motif" },
     { page: 3, icon: "✨", label: "Observasi" },
@@ -253,100 +162,53 @@ function renderFooterFeatureScrollbar() {
     { page: 10, icon: "📝", label: "Tugas" }
   ];
 
-  let itemsHTML = "";
-  quickNavItems.forEach((item) => {
+  let buttonsHTML = "";
+  featuresList.forEach((item) => {
     const isActive = currentPageIndex === item.page;
-    itemsHTML += `
-      <button onclick="goToPage(${item.page}); closeFloatingMenuPopup();" id="float-btn-${item.page}" title="Halaman ${item.page}: ${item.label}" style="
+    buttonsHTML += `
+      <button onclick="goToPage(${item.page})" title="Hal ${item.page}: ${item.label}" style="
         flex: 0 0 auto;
         display: inline-flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        gap: 5px;
         background: ${isActive ? '#ffd53d' : '#fff8eb'};
         color: ${isActive ? '#142347' : '#23140c'};
         border: 2px solid #23140c;
-        border-radius: 16px;
-        width: 44px;
-        height: 44px;
-        padding: 2px;
+        border-radius: 14px;
+        padding: 4px 10px;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
         cursor: pointer;
         box-shadow: ${isActive ? '0 2px 0 #23140c' : '0 3px 0 #23140c'};
         transform: ${isActive ? 'translateY(1px)' : 'none'};
         transition: all 0.15s ease;
       ">
-        <span style="font-size: 1.05rem; line-height: 1;">${item.icon}</span>
-        <span style="font-family: 'Fredoka', sans-serif; font-size: 0.62rem; font-weight: 700; margin-top: 1px;">H.${item.page}</span>
+        <span style="font-size: 0.85rem;">${item.icon}</span>
+        <span>Halaman ${item.page}</span>
       </button>
     `;
   });
 
-  // Tombol Tengah Utama (Aksi Cepat / Daftar Halaman)
-  const middleActionBtn = `
-    <button onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); closeFloatingMenuPopup();" title="Daftar Semua Halaman" style="
-      flex: 0 0 auto;
-      background: linear-gradient(135deg, #ffd53d 0%, #ffca28 100%);
-      color: #142347;
-      border: 2.5px solid #23140c;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 3px 0 #23140c;
-      transition: transform 0.1s;
-    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-      📋
-    </button>
-  `;
-
-  // Tombol Menu Lainnya di Ujung Kanan
-  const isMenuOpen = document.getElementById("floatingMenuPopup")?.style.display === "flex";
-  const menuLainnyaBtn = `
-    <button onclick="toggleFloatingMenuPopup()" title="Menu Lainnya" style="
-      flex: 0 0 auto;
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: ${isMenuOpen ? '#ffd53d' : '#142347'};
-      color: ${isMenuOpen ? '#142347' : '#ffd53d'};
-      border: 2px solid #23140c;
-      border-radius: 16px;
-      width: 52px;
-      height: 44px;
-      padding: 2px;
-      cursor: pointer;
-      box-shadow: 0 3px 0 #23140c;
-      transition: all 0.15s ease;
-    ">
-      <span style="font-size: 1rem; line-height: 1;">📂</span>
-      <span style="font-family: 'Fredoka', sans-serif; font-size: 0.62rem; font-weight: 700; margin-top: 1px;">Menu</span>
-    </button>
-  `;
-
-  navBox.innerHTML = `
-    <div style="display: flex; gap: 5px; overflow-x: auto; scroll-behavior: smooth; padding: 2px; align-items: center; flex: 1; scrollbar-width: none;">
-      ${itemsHTML}
-    </div>
-    <div style="display: flex; align-items: center; gap: 6px; margin-left: 6px; flex-shrink: 0;">
-      ${middleActionBtn}
-      ${menuLainnyaBtn}
+  siteFooter.innerHTML = `
+    <div style="width: 100%; max-width: 820px; margin: 0 auto; padding: 4px 10px; box-sizing: border-box;">
+      <div style="
+        display: flex; 
+        gap: 6px; 
+        overflow-x: auto; 
+        white-space: nowrap; 
+        padding: 4px 2px 6px 2px; 
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        justify-content: flex-start;
+        align-items: center;
+      ">
+        ${buttonsHTML}
+      </div>
     </div>
   `;
-
-  // Otomatis geser tombol aktif ke tengah di dalam floating bar
-  setTimeout(() => {
-    const activeBtn = document.getElementById(`float-btn-${currentPageIndex}`);
-    if (activeBtn && navBox) {
-      const scrollPos = activeBtn.offsetLeft - navBox.offsetWidth / 2 + activeBtn.offsetWidth / 2;
-      navBox.scrollTo({ left: scrollPos, behavior: 'smooth' });
-    }
-  }, 50);
 }
 
 function renderDaftarHalamanModal() {
