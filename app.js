@@ -162,9 +162,9 @@ function renderFooterFeatureScrollbar() {
     styleEl.id = "footerRadialStyle";
     styleEl.textContent = `
       @keyframes radialPopIn {
-        0% { transform: scale(0); opacity: 0; }
-        70% { transform: scale(1.1); opacity: 1; }
-        100% { transform: scale(1); opacity: 1; }
+        0% { transform: scale(0) translate(0, 0); opacity: 0; }
+        70% { transform: scale(1.1) translate(0, 0); opacity: 1; }
+        100% { transform: scale(1) translate(0, 0); opacity: 1; }
       }
       .radial-menu-item {
         position: absolute;
@@ -175,49 +175,49 @@ function renderFooterFeatureScrollbar() {
     document.head.appendChild(styleEl);
   }
 
-  // Membuat atau memperbarui elemen pop-up radial agar responsif di PC & HP
-  let popup = document.getElementById("footerFeaturePopup");
-  if (!popup) {
+  if (!document.getElementById("footerFeaturePopup")) {
     const popupHTML = `
       <div id="footerFeaturePopup" style="
         position: fixed;
+        bottom: 60px;
+        left: 14px;
+        width: 170px;
+        height: 170px;
         display: none;
-        width: 160px;
-        height: 160px;
         pointer-events: none;
-        z-index: 99999;
+        z-index: 9999;
       ">
         <!-- Tombol 1: Daftar Halaman (Atas) -->
-        <div class="radial-menu-item" style="top: -65px; left: 12px; pointer-events: auto;">
-          <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); closeFooterFeaturePopup();" title="Daftar Halaman" style="
-            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 46px; height: 46px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: transform 0.15s;
+        <div class="radial-menu-item" style="top: 0px; left: 60px; pointer-events: auto;">
+          <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); toggleFooterFeaturePopup();" title="Daftar Halaman" style="
+            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             📖
           </button>
         </div>
 
         <!-- Tombol 2: Putar Suara (Kiri) -->
-        <div class="radial-menu-item" style="top: -15px; left: -38px; pointer-events: auto;">
-          <button type="button" onclick="speakCurrentPageDialogues(); closeFooterFeaturePopup();" title="Putar Suara" style="
-            background: #ffd53d; border: 2.5px solid #23140c; border-radius: 50%; width: 46px; height: 46px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: transform 0.15s;
+        <div class="radial-menu-item" style="top: 60px; left: 0px; pointer-events: auto;">
+          <button type="button" onclick="speakCurrentPageDialogues(); toggleFooterFeaturePopup();" title="Putar Suara" style="
+            background: #ffd53d; border: 2.5px solid #23140c; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             🔊
           </button>
         </div>
 
         <!-- Tombol 3: Studio Sketsa (Kanan) -->
-        <div class="radial-menu-item" style="top: -15px; left: 62px; pointer-events: auto;">
-          <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); closeFooterFeaturePopup();" title="Studio Sketsa Fesyen" style="
-            background: #5b3a82; border: 2.5px solid #23140c; border-radius: 50%; width: 46px; height: 46px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: transform 0.15s;
+        <div class="radial-menu-item" style="top: 60px; left: 120px; pointer-events: auto;">
+          <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); toggleFooterFeaturePopup();" title="Studio Sketsa Fesyen" style="
+            background: #5b3a82; border: 2.5px solid #23140c; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             🎨
           </button>
         </div>
 
-        <!-- Tombol 4: Fullscreen (Atas Serong) -->
-        <div class="radial-menu-item" style="top: -65px; left: 62px; pointer-events: auto;">
-          <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} closeFooterFeaturePopup();" title="Layar Penuh (Fullscreen)" style="
-            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 46px; height: 46px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: transform 0.15s;
+        <!-- Tombol 4: Fullscreen (Serong Kanan Bawah) -->
+        <div class="radial-menu-item" style="top: 120px; left: 60px; pointer-events: auto;">
+          <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} toggleFooterFeaturePopup();" title="Layar Penuh (Fullscreen)" style="
+            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             ⛶
           </button>
@@ -225,13 +225,12 @@ function renderFooterFeatureScrollbar() {
       </div>
     `;
     document.body.insertAdjacentHTML("beforeend", popupHTML);
-    popup = document.getElementById("footerFeaturePopup");
   }
 
-  const isPopupOpen = popup.style.display === "block";
+  const isPopupOpen = document.getElementById("footerFeaturePopup")?.style.display === "block";
 
   const plusActionBtn = `
-    <button type="button" id="footerPlusBtn" onclick="toggleFooterFeaturePopup()" title="Menu Fitur Utama" style="
+    <button type="button" onclick="toggleFooterFeaturePopup()" title="Menu Fitur Utama" style="
       flex: 0 0 auto;
       background: ${isPopupOpen ? 'linear-gradient(135deg, #ff5252 0%, #d32f2f 100%)' : 'linear-gradient(135deg, #ffd53d 0%, #ffca28 100%)'};
       color: ${isPopupOpen ? '#ffffff' : '#142347'};
@@ -248,7 +247,7 @@ function renderFooterFeatureScrollbar() {
       box-shadow: 0 3px 0 #23140c;
       transition: all 0.2s ease;
       flex-shrink: 0;
-      margin-right: 8px;
+      margin-right: 4px;
     " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
       ${isPopupOpen ? '×' : '+'}
     </button>
@@ -295,9 +294,8 @@ function renderFooterFeatureScrollbar() {
     `;
   });
 
-  // Penyesuaian lebar maksimal dan padding agar fleksibel di layar PC maupun HP
   siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 980px; margin: 0 auto; padding: 2px clamp(8px, 2vw, 16px); box-sizing: border-box; display: flex; align-items: center;">
+    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box; display: flex; align-items: center; position: relative;">
       ${plusActionBtn}
       <div id="footerScrollContainer" style="
         display: flex; 
@@ -318,8 +316,6 @@ function renderFooterFeatureScrollbar() {
     </div>
   `;
 
-  updatePopupPosition();
-
   setTimeout(() => {
     const activeBtn = document.getElementById(`footer-btn-${currentPageIndex}`);
     const scrollContainer = document.getElementById("footerScrollContainer");
@@ -330,25 +326,12 @@ function renderFooterFeatureScrollbar() {
   }, 60);
 }
 
-function updatePopupPosition() {
-  const plusBtn = document.getElementById("footerPlusBtn");
-  const popup = document.getElementById("footerFeaturePopup");
-  if (!plusBtn || !popup) return;
-
-  const rect = plusBtn.getBoundingClientRect();
-  // Menyesuaikan posisi pop-up agar pas di atas tombol plus untuk berbagai ukuran layar (PC & HP)
-  popup.style.left = `${Math.max(10, rect.left + rect.width / 2 - 40)}px`;
-  popup.style.bottom = `${window.innerHeight - rect.top + 8}px`;
-}
-
 function toggleFooterFeaturePopup() {
   const popup = document.getElementById("footerFeaturePopup");
   if (!popup) return;
-  
   if (popup.style.display === "block") {
     popup.style.display = "none";
   } else {
-    updatePopupPosition();
     popup.style.display = "block";
   }
   renderFooterFeatureScrollbar();
@@ -359,10 +342,7 @@ function closeFooterFeaturePopup() {
   if (popup) popup.style.display = "none";
   renderFooterFeatureScrollbar();
 }
-
-window.addEventListener("resize", closeFooterFeaturePopup);
-window.addEventListener("scroll", closeFooterFeaturePopup, { passive: true });
-
+```[cite: 13]
 function renderBerandaHTML(page) {
   const charKeys = ["raka", "dimas", "guru", "nabila"];
   const charCardsHTML = charKeys
