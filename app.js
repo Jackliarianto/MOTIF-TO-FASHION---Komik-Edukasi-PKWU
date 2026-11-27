@@ -158,6 +158,84 @@ function renderFooterFeatureScrollbar() {
   siteFooter.style.boxShadow = "0 -4px 12px rgba(0,0,0,0.3)";
   siteFooter.style.padding = "6px 0";
 
+  // 1. Tombol Fitur Utama dari Bagian Atas Website
+  const topActionButtonsHTML = `
+    <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman');" title="Daftar Semua Halaman" style="
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff8eb;
+      color: #23140c;
+      border: 2px solid #23140c;
+      border-radius: 14px;
+      width: 38px;
+      height: 36px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #23140c;
+      transition: all 0.15s ease;
+    ">
+      <span style="font-size: 1rem;">📖</span>
+    </button>
+    
+    <button type="button" onclick="speakCurrentPageDialogues()" title="Putar Suara Percakapan" style="
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffd53d;
+      color: #142347;
+      border: 2px solid #23140c;
+      border-radius: 14px;
+      width: 38px;
+      height: 36px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #23140c;
+      transition: all 0.15s ease;
+    ">
+      <span style="font-size: 1rem;">🔊</span>
+    </button>
+
+    <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas();" title="Studio Sketsa Fesyen" style="
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #5b3a82;
+      color: #fff8eb;
+      border: 2px solid #23140c;
+      border-radius: 14px;
+      width: 38px;
+      height: 36px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #23140c;
+      transition: all 0.15s ease;
+    ">
+      <span style="font-size: 1rem;">🎨</span>
+    </button>
+
+    <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});}" title="Layar Penuh (Fullscreen)" style="
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff8eb;
+      color: #23140c;
+      border: 2px solid #23140c;
+      border-radius: 14px;
+      width: 38px;
+      height: 36px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #23140c;
+      transition: all 0.15s ease;
+    ">
+      <span style="font-size: 1rem;">⛶</span>
+    </button>
+    
+    <div style="width: 2px; height: 24px; background: rgba(255,213,61,0.4); margin: 0 4px; flex-shrink: 0;"></div>
+  `;
+
+  // 2. Tombol Navigasi Halaman (Halaman 1 sampai 10)
   const featuresList = [
     { page: 1, icon: "📖", label: "Dialog" },
     { page: 2, icon: "🔍", label: "Motif" },
@@ -171,10 +249,10 @@ function renderFooterFeatureScrollbar() {
     { page: 10, icon: "📝", label: "Tugas" }
   ];
 
-  let buttonsHTML = "";
+  let pageButtonsHTML = "";
   featuresList.forEach((item) => {
     const isActive = currentPageIndex === item.page;
-    buttonsHTML += `
+    pageButtonsHTML += `
       <button onclick="goToPage(${item.page})" id="footer-btn-${item.page}" title="Hal ${item.page}: ${item.label}" style="
         flex: 0 0 auto;
         display: inline-flex;
@@ -199,8 +277,9 @@ function renderFooterFeatureScrollbar() {
     `;
   });
 
+  // Gabungkan ke dalam elemen footer dengan wadah scroll horizontal
   siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 860px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box;">
+    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box;">
       <div id="footerScrollContainer" style="
         display: flex; 
         gap: 6px; 
@@ -214,12 +293,13 @@ function renderFooterFeatureScrollbar() {
         justify-content: flex-start;
         align-items: center;
       ">
-        ${buttonsHTML}
+        ${topActionButtonsHTML}
+        ${pageButtonsHTML}
       </div>
     </div>
   `;
 
-  // Menggeser barisan tombol di footer secara otomatis agar tombol halaman aktif (termasuk hal 8, 9, 10) selalu tersorot di tengah
+  // Otomatis menggeser barisan tombol di footer agar tombol halaman yang sedang aktif selalu tersorot di tengah pandangan
   setTimeout(() => {
     const activeBtn = document.getElementById(`footer-btn-${currentPageIndex}`);
     const scrollContainer = document.getElementById("footerScrollContainer");
