@@ -178,17 +178,17 @@ function renderFooterFeatureScrollbar() {
         font-family: 'Nunito', sans-serif;
       ">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #d4a36a; padding-bottom: 5px; margin-bottom: 2px;">
-          <span style="font-family: 'Fredoka', sans-serif; font-size: 0.9rem; font-weight: 700; color: #142347;">🛠️ Menu Fitur Cepat</span>
+          <span style="font-family: 'Fredoka', sans-serif; font-size: 0.9rem; font-weight: 700; color: #142347;">🛠️ Menu Fitur</span>
           <button type="button" onclick="closeFooterFeaturePopup()" style="background: #ffebee; color: #b71c1c; border: 2px solid #23140c; border-radius: 50%; width: 22px; height: 22px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">×</button>
         </div>
         <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); closeFooterFeaturePopup();" style="background: #ffffff; border: 2px solid #23140c; border-radius: 10px; padding: 7px 10px; text-align: left; font-weight: 800; font-size: 0.82rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
-          <span>📖</span> <span>Daftar Halaman</span>
+          <span>📖</span>
         </button>
         <button type="button" onclick="speakCurrentPageDialogues(); closeFooterFeaturePopup();" style="background: #ffd53d; border: 2px solid #23140c; border-radius: 10px; padding: 7px 10px; text-align: left; font-weight: 800; font-size: 0.82rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px; color: #142347;">
-          <span>🔊</span> <span>Putar Suara Percakapan</span>
+          <span>🔊</span>
         </button>
         <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); closeFooterFeaturePopup();" style="background: #5b3a82; color: #fff8eb; border: 2px solid #23140c; border-radius: 10px; padding: 7px 10px; text-align: left; font-weight: 800; font-size: 0.82rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
-          <span>🎨</span> <span>Studio Sketsa Fesyen</span>
+          <span>🎨</span>
         </button>
         <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} closeFooterFeaturePopup();" style="background: #ffffff; border: 2px solid #23140c; border-radius: 10px; padding: 7px 10px; text-align: left; font-weight: 800; font-size: 0.82rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
           <span>⛶</span> <span>Layar Penuh (Fullscreen)</span>
