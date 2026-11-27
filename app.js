@@ -162,9 +162,9 @@ function renderFooterFeatureScrollbar() {
     styleEl.id = "footerRadialStyle";
     styleEl.textContent = `
       @keyframes radialPopIn {
-        0% { transform: scale(0) translate(0, 0); opacity: 0; }
-        70% { transform: scale(1.1) translate(0, 0); opacity: 1; }
-        100% { transform: scale(1) translate(0, 0); opacity: 1; }
+        0% { transform: scale(0); opacity: 0; }
+        70% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
       }
       .radial-menu-item {
         position: absolute;
@@ -175,21 +175,21 @@ function renderFooterFeatureScrollbar() {
     document.head.appendChild(styleEl);
   }
 
-  if (!document.getElementById("footerFeaturePopup")) {
+  // Buat atau perbarui elemen pop-up langsung di body agar posisinya akurat di atas tombol plus
+  let popup = document.getElementById("footerFeaturePopup");
+  if (!popup) {
     const popupHTML = `
       <div id="footerFeaturePopup" style="
-        position: absolute;
-        bottom: 52px;
-        left: 0px;
-        width: 170px;
-        height: 170px;
+        position: fixed;
         display: none;
+        width: 160px;
+        height: 160px;
         pointer-events: none;
-        z-index: 9999;
+        z-index: 99999;
       ">
         <!-- Tombol 1: Daftar Halaman (Atas) -->
-        <div class="radial-menu-item" style="top: -10px; left: 50px; pointer-events: auto;">
-          <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); toggleFooterFeaturePopup();" title="Daftar Halaman" style="
+        <div class="radial-menu-item" style="top: -65px; left: 12px; pointer-events: auto;">
+          <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); closeFooterFeaturePopup();" title="Daftar Halaman" style="
             background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 46px; height: 46px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             📖
@@ -197,8 +197,8 @@ function renderFooterFeatureScrollbar() {
         </div>
 
         <!-- Tombol 2: Putar Suara (Kiri) -->
-        <div class="radial-menu-item" style="top: 45px; left: -10px; pointer-events: auto;">
-          <button type="button" onclick="speakCurrentPageDialogues(); toggleFooterFeaturePopup();" title="Putar Suara" style="
+        <div class="radial-menu-item" style="top: -15px; left: -38px; pointer-events: auto;">
+          <button type="button" onclick="speakCurrentPageDialogues(); closeFooterFeaturePopup();" title="Putar Suara" style="
             background: #ffd53d; border: 2.5px solid #23140c; border-radius: 50%; width: 46px; height: 46px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             🔊
@@ -206,17 +206,17 @@ function renderFooterFeatureScrollbar() {
         </div>
 
         <!-- Tombol 3: Studio Sketsa (Kanan) -->
-        <div class="radial-menu-item" style="top: 45px; left: 110px; pointer-events: auto;">
-          <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); toggleFooterFeaturePopup();" title="Studio Sketsa Fesyen" style="
+        <div class="radial-menu-item" style="top: -15px; left: 62px; pointer-events: auto;">
+          <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); closeFooterFeaturePopup();" title="Studio Sketsa Fesyen" style="
             background: #5b3a82; border: 2.5px solid #23140c; border-radius: 50%; width: 46px; height: 46px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             🎨
           </button>
         </div>
 
-        <!-- Tombol 4: Fullscreen (Atas Serong / Tengah Atas) -->
-        <div class="radial-menu-item" style="top: 100px; left: 50px; pointer-events: auto;">
-          <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} toggleFooterFeaturePopup();" title="Layar Penuh (Fullscreen)" style="
+        <!-- Tombol 4: Fullscreen (Atas Serong) -->
+        <div class="radial-menu-item" style="top: -65px; left: 62px; pointer-events: auto;">
+          <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} closeFooterFeaturePopup();" title="Layar Penuh (Fullscreen)" style="
             background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 46px; height: 46px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: transform 0.15s;
           " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             ⛶
@@ -224,39 +224,34 @@ function renderFooterFeatureScrollbar() {
         </div>
       </div>
     `;
-    
-    // Masukkan elemen pop-up langsung di dalam wrapper tombol plus agar posisinya relatif terhadap tombol plus
-    const wrapperTarget = document.getElementById("footerPlusWrapper");
-    if (wrapperTarget) {
-      wrapperTarget.insertAdjacentHTML("beforeend", popupHTML);
-    } else {
-      document.body.insertAdjacentHTML("beforeend", popupHTML);
-    }
+    document.body.insertAdjacentHTML("beforeend", popupHTML);
+    popup = document.getElementById("footerFeaturePopup");
   }
 
-  const isPopupOpen = document.getElementById("footerFeaturePopup")?.style.display === "block";
+  const isPopupOpen = popup.style.display === "block";
 
   const plusActionBtn = `
-    <div id="footerPlusWrapper" style="position: relative; display: inline-flex; align-items: center; flex-shrink: 0; margin-right: 6px;">
-      <button type="button" onclick="toggleFooterFeaturePopup()" title="Menu Fitur Utama" style="
-        background: ${isPopupOpen ? 'linear-gradient(135deg, #ff5252 0%, #d32f2f 100%)' : 'linear-gradient(135deg, #ffd53d 0%, #ffca28 100%)'};
-        color: ${isPopupOpen ? '#ffffff' : '#142347'};
-        border: 2.5px solid #23140c;
-        border-radius: 50%;
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.4rem;
-        font-weight: 900;
-        cursor: pointer;
-        box-shadow: 0 3px 0 #23140c;
-        transition: all 0.2s ease;
-      " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-        ${isPopupOpen ? '×' : '+'}
-      </button>
-    </div>
+    <button type="button" id="footerPlusBtn" onclick="toggleFooterFeaturePopup()" title="Menu Fitur Utama" style="
+      flex: 0 0 auto;
+      background: ${isPopupOpen ? 'linear-gradient(135deg, #ff5252 0%, #d32f2f 100%)' : 'linear-gradient(135deg, #ffd53d 0%, #ffca28 100%)'};
+      color: ${isPopupOpen ? '#ffffff' : '#142347'};
+      border: 2.5px solid #23140c;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #23140c;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      margin-right: 6px;
+    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+      ${isPopupOpen ? '×' : '+'}
+    </button>
   `;
 
   const featuresList = [
@@ -301,7 +296,7 @@ function renderFooterFeatureScrollbar() {
   });
 
   siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box; display: flex; align-items: center; position: relative;">
+    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box; display: flex; align-items: center;">
       ${plusActionBtn}
       <div id="footerScrollContainer" style="
         display: flex; 
@@ -322,12 +317,8 @@ function renderFooterFeatureScrollbar() {
     </div>
   `;
 
-  // Pindahkan elemen pop-up ke dalam wrapper plus setelah innerHTML dirender ulang
-  const wrapperTarget = document.getElementById("footerPlusWrapper");
-  const existingPopup = document.getElementById("footerFeaturePopup");
-  if (wrapperTarget && existingPopup) {
-    wrapperTarget.appendChild(existingPopup);
-  }
+  // Update posisi pop-up agar tepat mengikuti koordinat tombol plus di layar
+  updatePopupPosition();
 
   setTimeout(() => {
     const activeBtn = document.getElementById(`footer-btn-${currentPageIndex}`);
@@ -339,15 +330,33 @@ function renderFooterFeatureScrollbar() {
   }, 60);
 }
 
+function updatePopupPosition() {
+  const plusBtn = document.getElementById("footerPlusBtn");
+  const popup = document.getElementById("footerFeaturePopup");
+  if (!plusBtn || !popup) return;
+
+  const rect = plusBtn.getBoundingClientRect();
+  // Posisikan tepat di atas tombol plus
+  popup.style.left = `${rect.left + rect.width / 2 - 40}px`;
+  popup.style.bottom = `${window.innerHeight - rect.top + 6}px`;
+}
+
 function toggleFooterFeaturePopup() {
   const popup = document.getElementById("footerFeaturePopup");
   if (!popup) return;
+  
   if (popup.style.display === "block") {
     popup.style.display = "none";
   } else {
+    updatePopupPosition();
     popup.style.display = "block";
   }
-  renderFooterFeatureScrollbar();
+  // Render ulang untuk mengubah ikon tombol plus menjadi silang (×)
+  const siteFooter = document.querySelector(".site-footer");
+  if (siteFooter) {
+    // Panggil bagian render tombol plus saja atau render ulang state footer
+    renderFooterFeatureScrollbar();
+  }
 }
 
 function closeFooterFeaturePopup() {
@@ -356,19 +365,9 @@ function closeFooterFeaturePopup() {
   renderFooterFeatureScrollbar();
 }
 
-function renderDaftarHalamanModal() {
-  const grid = document.getElementById("daftarHalamanGrid");
-  let gridHTML = "";
-  for (let i = 1; i < COMIC_PAGES.length; i++) {
-    const p = COMIC_PAGES[i];
-    gridHTML += `
-      <button class="daftar-item-btn ${i === currentPageIndex ? "current" : ""}" onclick="goToPage(${i}); closeModal('modalDaftarHalaman');">
-        <span style="color:#8f291c;">Halaman ${i}</span><br/>
-        <span>${p.shortTitle}</span>
-      </button>`;
-  }
-  if (grid) grid.innerHTML = gridHTML;
-}
+// Tutup pop-up saat layar digeser atau di-resize
+window.addEventListener("resize", closeFooterFeaturePopup);
+window.addEventListener("scroll", closeFooterFeaturePopup, { passive: true });
 
 function renderBerandaHTML(page) {
   const charKeys = ["raka", "dimas", "guru", "nabila"];
