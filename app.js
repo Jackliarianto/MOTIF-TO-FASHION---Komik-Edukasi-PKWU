@@ -158,84 +158,74 @@ function renderFooterFeatureScrollbar() {
   siteFooter.style.boxShadow = "0 -4px 12px rgba(0,0,0,0.3)";
   siteFooter.style.padding = "6px 0";
 
-  // 1. Tombol Fitur Utama dari Bagian Atas Website
-  const topActionButtonsHTML = `
-    <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman');" title="Daftar Semua Halaman" style="
+  // Memastikan elemen popup menu fitur (jika belum ada di DOM)
+  if (!document.getElementById("footerFeaturePopup")) {
+    const popupHTML = `
+      <div id="footerFeaturePopup" style="
+        position: fixed;
+        bottom: 72px;
+        left: 16px;
+        width: 230px;
+        background: #fff8eb;
+        border: 3px solid #23140c;
+        border-radius: 18px;
+        box-shadow: 0 6px 0 #23140c, 0 12px 24px rgba(0,0,0,0.3);
+        padding: 12px;
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 9999;
+        font-family: 'Nunito', sans-serif;
+      ">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #d4a36a; padding-bottom: 5px; margin-bottom: 2px;">
+          <span style="font-family: 'Fredoka', sans-serif; font-size: 0.9rem; font-weight: 700; color: #142347;">🛠️ Menu Fitur Cepat</span>
+          <button type="button" onclick="closeFooterFeaturePopup()" style="background: #ffebee; color: #b71c1c; border: 2px solid #23140c; border-radius: 50%; width: 22px; height: 22px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">×</button>
+        </div>
+        <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); closeFooterFeaturePopup();" style="background: #ffffff; border: 2px solid #23140c; border-radius: 10px; padding: 7px 10px; text-align: left; font-weight: 800; font-size: 0.82rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
+          <span>📖</span> <span>Daftar Halaman</span>
+        </button>
+        <button type="button" onclick="speakCurrentPageDialogues(); closeFooterFeaturePopup();" style="background: #ffd53d; border: 2px solid #23140c; border-radius: 10px; padding: 7px 10px; text-align: left; font-weight: 800; font-size: 0.82rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px; color: #142347;">
+          <span>🔊</span> <span>Putar Suara Percakapan</span>
+        </button>
+        <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); closeFooterFeaturePopup();" style="background: #5b3a82; color: #fff8eb; border: 2px solid #23140c; border-radius: 10px; padding: 7px 10px; text-align: left; font-weight: 800; font-size: 0.82rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
+          <span>🎨</span> <span>Studio Sketsa Fesyen</span>
+        </button>
+        <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} closeFooterFeaturePopup();" style="background: #ffffff; border: 2px solid #23140c; border-radius: 10px; padding: 7px 10px; text-align: left; font-weight: 800; font-size: 0.82rem; cursor: pointer; box-shadow: 0 2px 0 #23140c; display: flex; align-items: center; gap: 8px;">
+          <span>⛶</span> <span>Layar Penuh (Fullscreen)</span>
+        </button>
+      </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", popupHTML);
+  }
+
+  const isPopupOpen = document.getElementById("footerFeaturePopup")?.style.display === "flex";
+
+  // Tombol Plus (+) di Ujung Kiri Footer
+  const plusActionBtn = `
+    <button type="button" onclick="toggleFooterFeaturePopup()" title="Menu Fitur Utama" style="
       flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff8eb;
-      color: #23140c;
-      border: 2px solid #23140c;
-      border-radius: 14px;
-      width: 38px;
-      height: 36px;
-      cursor: pointer;
-      box-shadow: 0 3px 0 #23140c;
-      transition: all 0.15s ease;
-    ">
-      <span style="font-size: 1rem;">📖</span>
-    </button>
-    
-    <button type="button" onclick="speakCurrentPageDialogues()" title="Putar Suara Percakapan" style="
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #ffd53d;
+      background: linear-gradient(135deg, #ffd53d 0%, #ffca28 100%);
       color: #142347;
-      border: 2px solid #23140c;
-      border-radius: 14px;
-      width: 38px;
-      height: 36px;
-      cursor: pointer;
-      box-shadow: 0 3px 0 #23140c;
-      transition: all 0.15s ease;
-    ">
-      <span style="font-size: 1rem;">🔊</span>
-    </button>
-
-    <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas();" title="Studio Sketsa Fesyen" style="
-      flex: 0 0 auto;
-      display: inline-flex;
+      border: 2.5px solid #23140c;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      background: #5b3a82;
-      color: #fff8eb;
-      border: 2px solid #23140c;
-      border-radius: 14px;
-      width: 38px;
-      height: 36px;
+      font-size: 1.3rem;
+      font-weight: 900;
       cursor: pointer;
       box-shadow: 0 3px 0 #23140c;
-      transition: all 0.15s ease;
-    ">
-      <span style="font-size: 1rem;">🎨</span>
+      transition: transform 0.15s;
+      flex-shrink: 0;
+      margin-right: 4px;
+    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+      ${isPopupOpen ? '×' : '+'}
     </button>
-
-    <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});}" title="Layar Penuh (Fullscreen)" style="
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff8eb;
-      color: #23140c;
-      border: 2px solid #23140c;
-      border-radius: 14px;
-      width: 38px;
-      height: 36px;
-      cursor: pointer;
-      box-shadow: 0 3px 0 #23140c;
-      transition: all 0.15s ease;
-    ">
-      <span style="font-size: 1rem;">⛶</span>
-    </button>
-    
-    <div style="width: 2px; height: 24px; background: rgba(255,213,61,0.4); margin: 0 4px; flex-shrink: 0;"></div>
   `;
 
-  // 2. Tombol Navigasi Halaman (Halaman 1 sampai 10)
+  // Tombol Navigasi Halaman (Halaman 1 sampai 10)
   const featuresList = [
     { page: 1, icon: "📖", label: "Dialog" },
     { page: 2, icon: "🔍", label: "Motif" },
@@ -253,7 +243,7 @@ function renderFooterFeatureScrollbar() {
   featuresList.forEach((item) => {
     const isActive = currentPageIndex === item.page;
     pageButtonsHTML += `
-      <button onclick="goToPage(${item.page})" id="footer-btn-${item.page}" title="Hal ${item.page}: ${item.label}" style="
+      <button onclick="goToPage(${item.page}); closeFooterFeaturePopup();" id="footer-btn-${item.page}" title="Hal ${item.page}: ${item.label}" style="
         flex: 0 0 auto;
         display: inline-flex;
         align-items: center;
@@ -277,9 +267,9 @@ function renderFooterFeatureScrollbar() {
     `;
   });
 
-  // Gabungkan ke dalam elemen footer dengan wadah scroll horizontal
   siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box;">
+    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box; display: flex; align-items: center;">
+      ${plusActionBtn}
       <div id="footerScrollContainer" style="
         display: flex; 
         gap: 6px; 
@@ -292,14 +282,14 @@ function renderFooterFeatureScrollbar() {
         -ms-overflow-style: none;
         justify-content: flex-start;
         align-items: center;
+        flex: 1;
       ">
-        ${topActionButtonsHTML}
         ${pageButtonsHTML}
       </div>
     </div>
   `;
 
-  // Otomatis menggeser barisan tombol di footer agar tombol halaman yang sedang aktif selalu tersorot di tengah pandangan
+  // Otomatis menggeser barisan tombol di footer agar tombol halaman aktif selalu tersorot di tengah
   setTimeout(() => {
     const activeBtn = document.getElementById(`footer-btn-${currentPageIndex}`);
     const scrollContainer = document.getElementById("footerScrollContainer");
@@ -310,18 +300,21 @@ function renderFooterFeatureScrollbar() {
   }, 60);
 }
 
-function renderDaftarHalamanModal() {
-  const grid = document.getElementById("daftarHalamanGrid");
-  let gridHTML = "";
-  for (let i = 1; i < COMIC_PAGES.length; i++) {
-    const p = COMIC_PAGES[i];
-    gridHTML += `
-      <button class="daftar-item-btn ${i === currentPageIndex ? "current" : ""}" onclick="goToPage(${i}); closeModal('modalDaftarHalaman');">
-        <span style="color:#8f291c;">Halaman ${i}</span><br/>
-        <span>${p.shortTitle}</span>
-      </button>`;
+function toggleFooterFeaturePopup() {
+  const popup = document.getElementById("footerFeaturePopup");
+  if (!popup) return;
+  if (popup.style.display === "flex") {
+    popup.style.display = "none";
+  } else {
+    popup.style.display = "flex";
   }
-  if (grid) grid.innerHTML = gridHTML;
+  renderFooterFeatureScrollbar();
+}
+
+function closeFooterFeaturePopup() {
+  const popup = document.getElementById("footerFeaturePopup");
+  if (popup) popup.style.display = "none";
+  renderFooterFeatureScrollbar();
 }
 
 function renderBerandaHTML(page) {
