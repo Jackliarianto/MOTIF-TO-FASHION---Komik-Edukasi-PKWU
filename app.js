@@ -149,6 +149,15 @@ function renderFooterFeatureScrollbar() {
   const siteFooter = document.querySelector(".site-footer");
   if (!siteFooter) return;
 
+  // Pastikan elemen footer memiliki styling posisi yang menempel & rapi di bawah
+  siteFooter.style.position = "sticky";
+  siteFooter.style.bottom = "0";
+  siteFooter.style.zIndex = "999";
+  siteFooter.style.background = "linear-gradient(135deg, #23140c 0%, #3d2314 100%)";
+  siteFooter.style.borderTop = "3px solid #ffd53d";
+  siteFooter.style.boxShadow = "0 -4px 12px rgba(0,0,0,0.3)";
+  siteFooter.style.padding = "6px 0";
+
   const featuresList = [
     { page: 1, icon: "📖", label: "Dialog" },
     { page: 2, icon: "🔍", label: "Motif" },
@@ -166,7 +175,7 @@ function renderFooterFeatureScrollbar() {
   featuresList.forEach((item) => {
     const isActive = currentPageIndex === item.page;
     buttonsHTML += `
-      <button onclick="goToPage(${item.page})" title="Hal ${item.page}: ${item.label}" style="
+      <button onclick="goToPage(${item.page})" id="footer-btn-${item.page}" title="Hal ${item.page}: ${item.label}" style="
         flex: 0 0 auto;
         display: inline-flex;
         align-items: center;
@@ -175,20 +184,51 @@ function renderFooterFeatureScrollbar() {
         color: ${isActive ? '#142347' : '#23140c'};
         border: 2px solid #23140c;
         border-radius: 14px;
-        padding: 4px 10px;
+        padding: 5px 12px;
         font-family: 'Fredoka', sans-serif;
-        font-size: 0.78rem;
+        font-size: 0.8rem;
         font-weight: 700;
         cursor: pointer;
         box-shadow: ${isActive ? '0 2px 0 #23140c' : '0 3px 0 #23140c'};
         transform: ${isActive ? 'translateY(1px)' : 'none'};
         transition: all 0.15s ease;
       ">
-        <span style="font-size: 0.85rem;">${item.icon}</span>
+        <span style="font-size: 0.9rem;">${item.icon}</span>
         <span>Halaman ${item.page}</span>
       </button>
     `;
   });
+
+  siteFooter.innerHTML = `
+    <div style="width: 100%; max-width: 860px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box;">
+      <div id="footerScrollContainer" style="
+        display: flex; 
+        gap: 6px; 
+        overflow-x: auto; 
+        white-space: nowrap; 
+        padding: 4px 2px; 
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        justify-content: flex-start;
+        align-items: center;
+      ">
+        ${buttonsHTML}
+      </div>
+    </div>
+  `;
+
+  // Otomatis menggeser barisan tombol di footer agar tombol halaman yang sedang aktif selalu berada di tengah pandangan
+  setTimeout(() => {
+    const activeBtn = document.getElementById(`footer-btn-${currentPageIndex}`);
+    const scrollContainer = document.getElementById("footerScrollContainer");
+    if (activeBtn && scrollContainer) {
+      const scrollLeftPos = activeBtn.offsetLeft - scrollContainer.offsetWidth / 2 + activeBtn.offsetWidth / 2;
+      scrollContainer.scrollTo({ left: scrollLeftPos, behavior: 'smooth' });
+    }
+  }, 50);
+}
 
   siteFooter.innerHTML = `
     <div style="width: 100%; max-width: 820px; margin: 0 auto; padding: 4px 10px; box-sizing: border-box;">
