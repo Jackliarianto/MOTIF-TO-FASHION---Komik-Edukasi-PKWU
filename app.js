@@ -150,16 +150,16 @@ function renderFooterFeatureScrollbar() {
   if (!siteFooter) return;
 
   const featuresList = [
-    { page: 1, icon: "📖", label: "Dialog" },
-    { page: 2, icon: "🔍", label: "Motif" },
-    { page: 3, icon: "✨", label: "Observasi" },
-    { page: 4, icon: "👗", label: "Desain" },
-    { page: 5, icon: "✏️", label: "Sketsa" },
-    { page: 6, icon: "💰", label: "HPP" },
-    { page: 7, icon: "🎬", label: "Produksi" },
-    { page: 8, icon: "⭐", label: "Kuis" },
-    { page: 9, icon: "🏪", label: "Expo" },
-    { page: 10, icon: "📝", label: "Tugas" }
+    { page: 1, icon: "📖", label: "Pengenalan & Dialog" },
+    { page: 2, icon: "🔍", label: "Ensiklopedia Motif" },
+    { page: 3, icon: "✨", label: "Analisis & Observasi" },
+    { page: 4, icon: "👗", label: "Transformasi Desain" },
+    { page: 5, icon: "✏️", label: "Studio Sketsa" },
+    { page: 6, icon: "💰", label: "Kalkulator HPP" },
+    { page: 7, icon: "🎬", label: "Langkah & Promosi" },
+    { page: 8, icon: "⭐", label: "Kuis Kreatif" },
+    { page: 9, icon: "🏪", label: "Expo Nusantara" },
+    { page: 10, icon: "📝", label: "Tugas & Refleksi" }
   ];
 
   let buttonsHTML = "";
@@ -170,51 +170,47 @@ function renderFooterFeatureScrollbar() {
         flex: 0 0 auto;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        background: ${isActive ? 'linear-gradient(135deg, #ffd53d 0%, #ffca28 100%)' : 'rgba(255, 248, 235, 0.95)'};
+        gap: 6px;
+        background: ${isActive ? '#ffd53d' : '#fff8eb'};
         color: ${isActive ? '#142347' : '#23140c'};
         border: 2px solid #23140c;
-        border-radius: 20px;
-        padding: 5px 11px;
-        font-family: 'Fredoka', sans-serif;
-        font-size: 0.8rem;
-        font-weight: 700;
+        border-radius: 16px;
+        padding: 6px 12px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
         cursor: pointer;
         box-shadow: ${isActive ? '0 2px 0 #23140c' : '0 3px 0 #23140c'};
         transform: ${isActive ? 'translateY(1px)' : 'none'};
         transition: all 0.15s ease;
       ">
-        <span style="font-size: 0.9rem;">${item.icon}</span>
-        <span>Hsl ${item.page}</span>
+        <span style="font-size: 0.95rem;">${item.icon}</span>
+        <span>Hal ${item.page}: ${item.label}</span>
       </button>
     `;
   });
 
   siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 860px; margin: 0 auto; padding: 4px 8px; box-sizing: border-box;">
+    <div style="width: 100%; max-width: 900px; margin: 0 auto; padding: 6px 10px; box-sizing: border-box;">
+      <div style="font-size: 0.78rem; color: #ffd53d; font-weight: 700; margin-bottom: 6px; text-align: center; font-family: 'Fredoka', sans-serif; letter-spacing: 0.5px;">
+        ✨ PILIHAN FITUR &amp; MATERI PEMBELAJARAN (GESER KANAN-KIRI) ✨
+      </div>
       <div style="
         display: flex; 
-        gap: 6px; 
+        gap: 8px; 
         overflow-x: auto; 
         white-space: nowrap; 
-        padding: 4px 2px 6px 2px; 
+        padding: 4px 2px 8px 2px; 
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        justify-content: flex-start;
-        align-items: center;
+        scrollbar-width: thin;
+        scrollbar-color: #ffd53d #142347;
       ">
         ${buttonsHTML}
       </div>
     </div>
   `;
 }
-```[cite: 10]
-
-### Ringkasan Perubahan:
-1. **Teks Panjang Dihapus**: Judul teks panduan di atas tombol footer sepenuhnya dihilangkan agar footer menjadi lebih ringkas dan minimalis.
-2. **Label Tombol Dipersingkat**: Nama halaman disederhanakan (misalnya *"Hal 1: Pengenalan & Dialog"* menjadi *"Hal 1: Dialog"*, *"Hal 2: Ensiklopedia Motif"* menjadi *"Hal 2: Motif"*), sehingga bentuk tombolnya menjadi lebih kecil, rapi, dan mudah digeser (*horizontal scrolling*).
-3. **Gaya Estetis Komik**: Menggunakan font bergaya komik (*Fredoka*), sudut melengkung kapsul (`border-radius: 20px`), efek bayangan tombol yang konsisten, serta warna kuning emas terang untuk menandai halaman aktif[cite: 10].
 
 function renderDaftarHalamanModal() {
   const grid = document.getElementById("daftarHalamanGrid");
