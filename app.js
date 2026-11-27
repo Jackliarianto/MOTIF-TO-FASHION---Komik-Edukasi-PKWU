@@ -342,7 +342,7 @@ function closeFooterFeaturePopup() {
   if (popup) popup.style.display = "none";
   renderFooterFeatureScrollbar();
 }
-```[cite: 13]
+
 function renderBerandaHTML(page) {
   const charKeys = ["raka", "dimas", "guru", "nabila"];
   const charCardsHTML = charKeys
