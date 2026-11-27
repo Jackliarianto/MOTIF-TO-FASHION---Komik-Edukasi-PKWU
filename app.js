@@ -175,7 +175,7 @@ function renderFooterFeatureScrollbar() {
     document.head.appendChild(styleEl);
   }
 
-  // Buat atau perbarui elemen pop-up langsung di body agar posisinya akurat di atas tombol plus
+  // Membuat atau memperbarui elemen pop-up radial agar responsif di PC & HP
   let popup = document.getElementById("footerFeaturePopup");
   if (!popup) {
     const popupHTML = `
@@ -248,7 +248,7 @@ function renderFooterFeatureScrollbar() {
       box-shadow: 0 3px 0 #23140c;
       transition: all 0.2s ease;
       flex-shrink: 0;
-      margin-right: 6px;
+      margin-right: 8px;
     " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
       ${isPopupOpen ? '×' : '+'}
     </button>
@@ -295,8 +295,9 @@ function renderFooterFeatureScrollbar() {
     `;
   });
 
+  // Penyesuaian lebar maksimal dan padding agar fleksibel di layar PC maupun HP
   siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box; display: flex; align-items: center;">
+    <div style="width: 100%; max-width: 980px; margin: 0 auto; padding: 2px clamp(8px, 2vw, 16px); box-sizing: border-box; display: flex; align-items: center;">
       ${plusActionBtn}
       <div id="footerScrollContainer" style="
         display: flex; 
@@ -317,7 +318,6 @@ function renderFooterFeatureScrollbar() {
     </div>
   `;
 
-  // Update posisi pop-up agar tepat mengikuti koordinat tombol plus di layar
   updatePopupPosition();
 
   setTimeout(() => {
@@ -336,9 +336,9 @@ function updatePopupPosition() {
   if (!plusBtn || !popup) return;
 
   const rect = plusBtn.getBoundingClientRect();
-  // Posisikan tepat di atas tombol plus
-  popup.style.left = `${rect.left + rect.width / 2 - 40}px`;
-  popup.style.bottom = `${window.innerHeight - rect.top + 6}px`;
+  // Menyesuaikan posisi pop-up agar pas di atas tombol plus untuk berbagai ukuran layar (PC & HP)
+  popup.style.left = `${Math.max(10, rect.left + rect.width / 2 - 40)}px`;
+  popup.style.bottom = `${window.innerHeight - rect.top + 8}px`;
 }
 
 function toggleFooterFeaturePopup() {
@@ -351,12 +351,7 @@ function toggleFooterFeaturePopup() {
     updatePopupPosition();
     popup.style.display = "block";
   }
-  // Render ulang untuk mengubah ikon tombol plus menjadi silang (×)
-  const siteFooter = document.querySelector(".site-footer");
-  if (siteFooter) {
-    // Panggil bagian render tombol plus saja atau render ulang state footer
-    renderFooterFeatureScrollbar();
-  }
+  renderFooterFeatureScrollbar();
 }
 
 function closeFooterFeaturePopup() {
@@ -365,7 +360,6 @@ function closeFooterFeaturePopup() {
   renderFooterFeatureScrollbar();
 }
 
-// Tutup pop-up saat layar digeser atau di-resize
 window.addEventListener("resize", closeFooterFeaturePopup);
 window.addEventListener("scroll", closeFooterFeaturePopup, { passive: true });
 
