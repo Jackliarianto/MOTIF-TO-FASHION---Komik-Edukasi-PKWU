@@ -379,7 +379,6 @@ function initDraggablePopup() {
     isDragging = false;
   }
 }
-```[cite: 12]
 
 function renderBerandaHTML(page) {
   const charKeys = ["raka", "dimas", "guru", "nabila"];
