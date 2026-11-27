@@ -149,6 +149,95 @@ function renderFooterFeatureScrollbar() {
   const siteFooter = document.querySelector(".site-footer");
   if (!siteFooter) return;
 
+  siteFooter.style.position = "sticky";
+  siteFooter.style.bottom = "0";
+  siteFooter.style.zIndex = "999";
+  siteFooter.style.background = "linear-gradient(135deg, #23140c 0%, #3d2314 100%)";
+  siteFooter.style.borderTop = "3px solid #ffd53d";
+  siteFooter.style.boxShadow = "0 -4px 12px rgba(0,0,0,0.3)";
+  siteFooter.style.padding = "6px 0";
+
+  if (!document.getElementById("footerFeaturePopup")) {
+    const popupHTML = `
+      <div id="footerFeaturePopup" style="
+        position: fixed;
+        bottom: 72px;
+        left: 16px;
+        width: 170px;
+        background: #fff8eb;
+        border: 3px solid #23140c;
+        border-radius: 18px;
+        box-shadow: 0 6px 0 #23140c, 0 12px 24px rgba(0,0,0,0.3);
+        padding: 12px;
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 9999;
+        font-family: 'Nunito', sans-serif;
+        touch-action: none;
+      ">
+        <div id="footerPopupDragHeader" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #d4a36a; padding-bottom: 5px; margin-bottom: 2px; cursor: move;" title="Seret (Drag) untuk memindahkan menu">
+          <span style="font-family: 'Fredoka', sans-serif; font-size: 0.85rem; font-weight: 700; color: #142347;">✨ Menu Fitur</span>
+          <button type="button" onclick="closeFooterFeaturePopup()" style="background: #ffebee; color: #b71c1c; border: 2px solid #23140c; border-radius: 50%; width: 22px; height: 22px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">×</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; justify-items: center; padding: 4px;">
+          <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); closeFooterFeaturePopup();" title="Daftar Halaman" style="
+            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+          " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            📖
+          </button>
+
+          <button type="button" onclick="speakCurrentPageDialogues(); closeFooterFeaturePopup();" title="Putar Suara" style="
+            background: #ffd53d; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+          " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            🔊
+          </button>
+
+          <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); closeFooterFeaturePopup();" title="Studio Sketsa Fesyen" style="
+            background: #5b3a82; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+          " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            🎨
+          </button>
+
+          <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} closeFooterFeaturePopup();" title="Layar Penuh (Fullscreen)" style="
+            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+          " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            ⛶
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", popupHTML);
+    initDraggablePopup();
+  }
+
+  const isPopupOpen = document.getElementById("footerFeaturePopup")?.style.display === "flex";
+
+  const plusActionBtn = `
+    <button type="button" onclick="toggleFooterFeaturePopup()" title="Menu Fitur Utama" style="
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, #ffd53d 0%, #ffca28 100%);
+      color: #142347;
+      border: 2.5px solid #23140c;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #23140c;
+      transition: transform 0.15s;
+      flex-shrink: 0;
+      margin-right: 4px;
+    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+      ${isPopupOpen ? '×' : '+'}
+    </button>
+  `;
+
   const featuresList = [
     { page: 1, icon: "📖", label: "Dialog" },
     { page: 2, icon: "🔍", label: "Motif" },
@@ -162,11 +251,11 @@ function renderFooterFeatureScrollbar() {
     { page: 10, icon: "📝", label: "Tugas" }
   ];
 
-  let buttonsHTML = "";
+  let pageButtonsHTML = "";
   featuresList.forEach((item) => {
     const isActive = currentPageIndex === item.page;
-    buttonsHTML += `
-      <button onclick="goToPage(${item.page})" title="Hal ${item.page}: ${item.label}" style="
+    pageButtonsHTML += `
+      <button onclick="goToPage(${item.page}); closeFooterFeaturePopup();" id="footer-btn-${item.page}" title="Hal ${item.page}: ${item.label}" style="
         flex: 0 0 auto;
         display: inline-flex;
         align-items: center;
@@ -175,40 +264,120 @@ function renderFooterFeatureScrollbar() {
         color: ${isActive ? '#142347' : '#23140c'};
         border: 2px solid #23140c;
         border-radius: 14px;
-        padding: 4px 10px;
+        padding: 5px 12px;
         font-family: 'Fredoka', sans-serif;
-        font-size: 0.78rem;
+        font-size: 0.8rem;
         font-weight: 700;
         cursor: pointer;
         box-shadow: ${isActive ? '0 2px 0 #23140c' : '0 3px 0 #23140c'};
         transform: ${isActive ? 'translateY(1px)' : 'none'};
         transition: all 0.15s ease;
       ">
-        <span style="font-size: 0.85rem;">${item.icon}</span>
+        <span style="font-size: 0.9rem;">${item.icon}</span>
         <span>Halaman ${item.page}</span>
       </button>
     `;
   });
 
   siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 820px; margin: 0 auto; padding: 4px 10px; box-sizing: border-box;">
-      <div style="
+    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box; display: flex; align-items: center;">
+      ${plusActionBtn}
+      <div id="footerScrollContainer" style="
         display: flex; 
         gap: 6px; 
         overflow-x: auto; 
         white-space: nowrap; 
-        padding: 4px 2px 6px 2px; 
+        padding: 4px 2px; 
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         -ms-overflow-style: none;
         justify-content: flex-start;
         align-items: center;
+        flex: 1;
       ">
-        ${buttonsHTML}
+        ${pageButtonsHTML}
       </div>
     </div>
   `;
+
+  setTimeout(() => {
+    const activeBtn = document.getElementById(`footer-btn-${currentPageIndex}`);
+    const scrollContainer = document.getElementById("footerScrollContainer");
+    if (activeBtn && scrollContainer) {
+      const scrollLeftPos = activeBtn.offsetLeft - (scrollContainer.offsetWidth / 2) + (activeBtn.offsetWidth / 2);
+      scrollContainer.scrollTo({ left: scrollLeftPos, behavior: 'smooth' });
+    }
+  }, 60);
+}
+
+function toggleFooterFeaturePopup() {
+  const popup = document.getElementById("footerFeaturePopup");
+  if (!popup) return;
+  if (popup.style.display === "flex") {
+    popup.style.display = "none";
+  } else {
+    popup.style.display = "flex";
+  }
+  renderFooterFeatureScrollbar();
+}
+
+function closeFooterFeaturePopup() {
+  const popup = document.getElementById("footerFeaturePopup");
+  if (popup) popup.style.display = "none";
+  renderFooterFeatureScrollbar();
+}
+
+function initDraggablePopup() {
+  const popup = document.getElementById("footerFeaturePopup");
+  const header = document.getElementById("footerPopupDragHeader");
+  if (!popup || !header) return;
+
+  let isDragging = false;
+  let startX, startY, initialX, initialY;
+
+  header.addEventListener("mousedown", dragStart);
+  document.addEventListener("mousemove", drag);
+  document.addEventListener("mouseup", dragEnd);
+
+  header.addEventListener("touchstart", dragStart, { passive: false });
+  document.addEventListener("touchmove", drag, { passive: false });
+  document.addEventListener("touchend", dragEnd);
+
+  function dragStart(e) {
+    isDragging = true;
+    const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
+
+    startX = clientX;
+    startY = clientY;
+
+    const rect = popup.getBoundingClientRect();
+    initialX = rect.left;
+    initialY = rect.top;
+
+    popup.style.bottom = "auto";
+    popup.style.left = `${initialX}px`;
+    popup.style.top = `${initialY}px`;
+  }
+
+  function drag(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+
+    const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+
+    popup.style.left = `${initialX + dx}px`;
+    popup.style.top = `${initialY + dy}px`;
+  }
+
+  function dragEnd() {
+    isDragging = false;
+  }
 }
 
 function renderDaftarHalamanModal() {
