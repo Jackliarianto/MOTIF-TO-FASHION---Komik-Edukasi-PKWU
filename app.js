@@ -157,80 +157,97 @@ function renderFooterFeatureScrollbar() {
   siteFooter.style.boxShadow = "0 -4px 12px rgba(0,0,0,0.3)";
   siteFooter.style.padding = "6px 0";
 
+  // CSS Animasi & Popup Radial Melingkar ala MoneyTracking
+  if (!document.getElementById("footerRadialStyle")) {
+    const styleEl = document.createElement("style");
+    styleEl.id = "footerRadialStyle";
+    styleEl.textContent = `
+      @keyframes radialPopIn {
+        0% { transform: scale(0) translate(0, 0); opacity: 0; }
+        70% { transform: scale(1.1) translate(0, 0); opacity: 1; }
+        100% { transform: scale(1) translate(0, 0); opacity: 1; }
+      }
+      .radial-menu-item {
+        position: absolute;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+        animation: radialPopIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+    `;
+    document.head.appendChild(styleEl);
+  }
+
   if (!document.getElementById("footerFeaturePopup")) {
     const popupHTML = `
       <div id="footerFeaturePopup" style="
         position: fixed;
-        bottom: 72px;
-        left: 16px;
-        width: 170px;
-        background: #fff8eb;
-        border: 3px solid #23140c;
-        border-radius: 18px;
-        box-shadow: 0 6px 0 #23140c, 0 12px 24px rgba(0,0,0,0.3);
-        padding: 12px;
+        bottom: 78px;
+        left: 28px;
+        width: 190px;
+        height: 190px;
         display: none;
-        flex-direction: column;
-        gap: 10px;
+        pointer-events: none;
         z-index: 9999;
-        font-family: 'Nunito', sans-serif;
-        touch-action: none;
       ">
-        <div id="footerPopupDragHeader" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #d4a36a; padding-bottom: 5px; margin-bottom: 2px; cursor: move;" title="Seret (Drag) untuk memindahkan menu">
-          <span style="font-family: 'Fredoka', sans-serif; font-size: 0.85rem; font-weight: 700; color: #142347;">✨ Menu Fitur</span>
-          <button type="button" onclick="closeFooterFeaturePopup()" style="background: #ffebee; color: #b71c1c; border: 2px solid #23140c; border-radius: 50%; width: 22px; height: 22px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">×</button>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; justify-items: center; padding: 4px;">
-          <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); closeFooterFeaturePopup();" title="Daftar Halaman" style="
-            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
-          " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+        <!-- Tombol 1: Daftar Halaman (Atas) -->
+        <div class="radial-menu-item" style="top: 0px; left: 70px; pointer-events: auto;">
+          <button type="button" onclick="renderDaftarHalamanModal(); openModal('modalDaftarHalaman'); toggleFooterFeaturePopup();" title="Daftar Halaman" style="
+            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+          " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             📖
           </button>
+        </div>
 
-          <button type="button" onclick="speakCurrentPageDialogues(); closeFooterFeaturePopup();" title="Putar Suara" style="
-            background: #ffd53d; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
-          " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+        <!-- Tombol 2: Putar Suara (Kiri) -->
+        <div class="radial-menu-item" style="top: 70px; left: 0px; pointer-events: auto;">
+          <button type="button" onclick="speakCurrentPageDialogues(); toggleFooterFeaturePopup();" title="Putar Suara" style="
+            background: #ffd53d; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+          " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             🔊
           </button>
+        </div>
 
-          <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); closeFooterFeaturePopup();" title="Studio Sketsa Fesyen" style="
-            background: #5b3a82; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
-          " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+        <!-- Tombol 3: Studio Sketsa (Kanan) -->
+        <div class="radial-menu-item" style="top: 70px; left: 140px; pointer-events: auto;">
+          <button type="button" onclick="openModal('modalStudioSketsa'); drawFashionCanvas(); toggleFooterFeaturePopup();" title="Studio Sketsa Fesyen" style="
+            background: #5b3a82; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+          " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             🎨
           </button>
+        </div>
 
-          <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} closeFooterFeaturePopup();" title="Layar Penuh (Fullscreen)" style="
-            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 3px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
-          " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+        <!-- Tombol 4: Fullscreen (Bawah/Serong Kanan) -->
+        <div class="radial-menu-item" style="top: 135px; left: 70px; pointer-events: auto;">
+          <button type="button" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} toggleFooterFeaturePopup();" title="Layar Penuh (Fullscreen)" style="
+            background: #ffffff; border: 2.5px solid #23140c; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 0 #23140c; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.15s;
+          " onmouseover="this.style.transform='scale(1.12)'" onmouseout="this.style.transform='scale(1)'">
             ⛶
           </button>
         </div>
       </div>
     `;
     document.body.insertAdjacentHTML("beforeend", popupHTML);
-    initDraggablePopup();
   }
 
-  const isPopupOpen = document.getElementById("footerFeaturePopup")?.style.display === "flex";
+  const isPopupOpen = document.getElementById("footerFeaturePopup")?.style.display === "block";
 
+  // Tombol Plus (+) utama yang berubah menjadi tombol silang (×) pink saat dibuka
   const plusActionBtn = `
     <button type="button" onclick="toggleFooterFeaturePopup()" title="Menu Fitur Utama" style="
       flex: 0 0 auto;
-      background: linear-gradient(135deg, #ffd53d 0%, #ffca28 100%);
-      color: #142347;
+      background: ${isPopupOpen ? 'linear-gradient(135deg, #ff5252 0%, #d32f2f 100%)' : 'linear-gradient(135deg, #ffd53d 0%, #ffca28 100%)'};
+      color: ${isPopupOpen ? '#ffffff' : '#142347'};
       border: 2.5px solid #23140c;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      font-size: ${isPopupOpen ? '1.4rem' : '1.4rem'};
       font-weight: 900;
       cursor: pointer;
       box-shadow: 0 3px 0 #23140c;
-      transition: transform 0.15s;
+      transition: all 0.2s ease;
       flex-shrink: 0;
       margin-right: 4px;
     " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
@@ -280,7 +297,7 @@ function renderFooterFeatureScrollbar() {
   });
 
   siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box; display: flex; align-items: center;">
+    <div style="width: 100%; max-width: 920px; margin: 0 auto; padding: 2px 10px; box-sizing: border-box; display: flex; align-items: center; position: relative;">
       ${plusActionBtn}
       <div id="footerScrollContainer" style="
         display: flex; 
@@ -314,10 +331,10 @@ function renderFooterFeatureScrollbar() {
 function toggleFooterFeaturePopup() {
   const popup = document.getElementById("footerFeaturePopup");
   if (!popup) return;
-  if (popup.style.display === "flex") {
+  if (popup.style.display === "block") {
     popup.style.display = "none";
   } else {
-    popup.style.display = "flex";
+    popup.style.display = "block";
   }
   renderFooterFeatureScrollbar();
 }
@@ -326,58 +343,6 @@ function closeFooterFeaturePopup() {
   const popup = document.getElementById("footerFeaturePopup");
   if (popup) popup.style.display = "none";
   renderFooterFeatureScrollbar();
-}
-
-function initDraggablePopup() {
-  const popup = document.getElementById("footerFeaturePopup");
-  const header = document.getElementById("footerPopupDragHeader");
-  if (!popup || !header) return;
-
-  let isDragging = false;
-  let startX, startY, initialX, initialY;
-
-  header.addEventListener("mousedown", dragStart);
-  document.addEventListener("mousemove", drag);
-  document.addEventListener("mouseup", dragEnd);
-
-  header.addEventListener("touchstart", dragStart, { passive: false });
-  document.addEventListener("touchmove", drag, { passive: false });
-  document.addEventListener("touchend", dragEnd);
-
-  function dragStart(e) {
-    isDragging = true;
-    const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
-    const clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
-
-    startX = clientX;
-    startY = clientY;
-
-    const rect = popup.getBoundingClientRect();
-    initialX = rect.left;
-    initialY = rect.top;
-
-    popup.style.bottom = "auto";
-    popup.style.left = `${initialX}px`;
-    popup.style.top = `${initialY}px`;
-  }
-
-  function drag(e) {
-    if (!isDragging) return;
-    e.preventDefault();
-
-    const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
-    const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
-
-    const dx = clientX - startX;
-    const dy = clientY - startY;
-
-    popup.style.left = `${initialX + dx}px`;
-    popup.style.top = `${initialY + dy}px`;
-  }
-
-  function dragEnd() {
-    isDragging = false;
-  }
 }
 
 function renderDaftarHalamanModal() {
