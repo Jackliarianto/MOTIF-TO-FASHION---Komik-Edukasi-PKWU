@@ -1784,64 +1784,424 @@ function ensureRangkumanModalInDOM() {
   if (document.getElementById("rangkumanModalOverlay")) return;
 
   const modalHTML = `
-    <div id="rangkumanModalOverlay" class="rangkuman-modal-overlay" style="display: none;" onclick="if(event.target === this) closeRangkumanModal()">
-      <div class="rangkuman-modal-box">
-        <button type="button" class="rangkuman-close-btn" onclick="closeRangkumanModal()" title="Tutup">×</button>
+    <style>
+      @keyframes posterFloat {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-6px) rotate(2deg); }
+      }
+      @keyframes posterPulseGlow {
+        0%, 100% { box-shadow: 0 4px 0 #23140c, 0 0 0 rgba(255, 213, 61, 0); }
+        50% { box-shadow: 0 4px 0 #23140c, 0 0 18px rgba(255, 213, 61, 0.75); }
+      }
+      @keyframes posterSlideUp {
+        from { opacity: 0; transform: translateY(18px) scale(0.97); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      @keyframes cloudDrift {
+        0%, 100% { transform: translateX(-4px); }
+        50% { transform: translateX(4px); }
+      }
+      @keyframes spinSlow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
 
-        <div class="rangkuman-hero-banner">
-          <span class="rangkuman-badge-pill">KESIMPULAN MATERI</span>
-          <h2>INFOGRAFIS NUSANTARA: MOTIF TO FASHION</h2>
-          <p>Ringkasan Lengkap Proses Pembelajaran Prakarya &amp; Kewirausahaan Kelas X</p>
+      #rangkumanModalOverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(12, 20, 41, 0.85);
+        backdrop-filter: blur(5px);
+        z-index: 9999;
+        display: none;
+        justify-content: center;
+        align-items: flex-start;
+        overflow-y: auto;
+        padding: 20px 12px;
+        box-sizing: border-box;
+      }
+
+      .poster-canvas-wrapper {
+        width: 100%;
+        max-width: 780px;
+        background: 
+          radial-gradient(circle at 15% 15%, rgba(255, 213, 61, 0.25) 0%, transparent 40%),
+          radial-gradient(circle at 85% 85%, rgba(143, 41, 28, 0.15) 0%, transparent 40%),
+          #fff8eb;
+        border: 5px solid #23140c;
+        border-radius: 26px;
+        box-shadow: 0 12px 0 #23140c, 0 24px 48px rgba(0, 0, 0, 0.6);
+        padding: 26px 24px 24px 24px;
+        position: relative;
+        font-family: 'Nunito', sans-serif;
+        color: #23140c;
+        animation: posterSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+        margin: auto;
+      }
+
+      .poster-halftone {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(#d4a36a 1.2px, transparent 1.2px);
+        background-size: 16px 16px;
+        opacity: 0.22;
+        pointer-events: none;
+      }
+
+      .poster-close-fab {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ffebee;
+        color: #b71c1c;
+        border: 3px solid #23140c;
+        font-size: 1.35rem;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 0 3px 0 #23140c;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s;
+      }
+      .poster-close-fab:hover {
+        transform: scale(1.1) rotate(90deg);
+      }
+
+      .poster-top-banner {
+        background: linear-gradient(135deg, #142347 0%, #1e3770 100%);
+        border: 3.5px solid #23140c;
+        border-radius: 20px;
+        padding: 20px 18px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 6px 0 #23140c;
+        margin-bottom: 18px;
+        z-index: 2;
+      }
+
+      .poster-ribbon-tag {
+        display: inline-block;
+        background: #ffd53d;
+        color: #23140c;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 4px 16px;
+        border-radius: 20px;
+        border: 2.5px solid #23140c;
+        margin-bottom: 8px;
+        letter-spacing: 0.6px;
+        animation: posterPulseGlow 2.5s infinite;
+      }
+
+      .poster-top-banner h2 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: clamp(1.5rem, 3.6vw, 2.2rem);
+        color: #ffd53d;
+        margin: 0 0 6px 0;
+        text-shadow: 2.5px 2.5px 0 #23140c;
+        line-height: 1.15;
+      }
+
+      .poster-top-banner p {
+        color: #fff8eb;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      .poster-motif-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 18px;
+        position: relative;
+        z-index: 2;
+      }
+      .motif-mini-badge {
+        background: #ffffff;
+        border: 2.5px solid #23140c;
+        border-radius: 14px;
+        padding: 8px 6px;
+        text-align: center;
+        box-shadow: 0 3px 0 #23140c;
+        animation: posterFloat 4s ease-in-out infinite;
+      }
+      .motif-mini-badge:nth-child(2) { animation-delay: 0.6s; }
+      .motif-mini-badge:nth-child(3) { animation-delay: 1.2s; }
+      .motif-mini-badge:nth-child(4) { animation-delay: 1.8s; }
+
+      .motif-mini-badge span {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: #142347;
+        margin-top: 4px;
+      }
+
+      .poster-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+        gap: 14px;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .poster-step-card {
+        border: 3px solid #23140c;
+        border-radius: 16px;
+        padding: 14px;
+        box-shadow: 0 4px 0 #23140c;
+        transition: transform 0.2s ease;
+      }
+      .poster-step-card:hover {
+        transform: translateY(-3px);
+      }
+
+      .step-navy { background: #eef3ff; }
+      .step-gold { background: #fff9db; }
+      .step-maroon { background: #fdf0ef; }
+      .step-green { background: #eafaf1; }
+
+      .poster-step-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+
+      .step-num-circle {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2.5px solid #23140c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+        box-shadow: 0 2px 0 #23140c;
+      }
+
+      .poster-step-head h3 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 1.02rem;
+        margin: 0;
+        color: #142347;
+      }
+
+      .poster-step-body {
+        background: #ffffff;
+        border: 2px solid #23140c;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+        line-height: 1.48;
+      }
+
+      .poster-formula-banner {
+        background: linear-gradient(90deg, #ffd53d 0%, #ffca28 100%);
+        border: 3px solid #23140c;
+        border-radius: 14px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 0 #23140c;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .poster-formula-pill {
+        background: #142347;
+        color: #ffd53d;
+        padding: 6px 12px;
+        border-radius: 10px;
+        border: 2px solid #23140c;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 0.85rem;
+      }
+
+      .poster-bottom-credit {
+        background: #23140c;
+        color: #fff8eb;
+        border-radius: 12px;
+        padding: 10px 14px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 14px;
+      }
+
+      .poster-bottom-actions {
+        display: flex;
+        gap: 10px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .poster-btn-print {
+        flex: 1;
+        background: #148348;
+        color: #ffffff;
+        border: 2.5px solid #23140c;
+        border-radius: 12px;
+        padding: 12px;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 0.98rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 0 #23140c;
+      }
+      .poster-btn-done {
+        flex: 1;
+        background: #142347;
+        color: #ffd53d;
+        border: 2.5px solid #23140c;
+        border-radius: 12px;
+        padding: 12px;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 0.98rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 0 #23140c;
+      }
+
+      @media print {
+        body * { visibility: hidden; }
+        #rangkumanModalOverlay, #rangkumanModalOverlay * { visibility: visible; }
+        #rangkumanModalOverlay { position: absolute; left: 0; top: 0; background: none; padding: 0; }
+        .poster-canvas-wrapper { box-shadow: none; border: 3px solid #000; max-width: 100%; }
+        .poster-close-fab, .poster-bottom-actions { display: none !important; }
+      }
+    </style>
+
+    <div id="rangkumanModalOverlay" onclick="if(event.target === this) closeRangkumanModal()">
+      <div class="poster-canvas-wrapper">
+        <div class="poster-halftone"></div>
+        <button type="button" class="poster-close-fab" onclick="closeRangkumanModal()" title="Tutup Poster">×</button>
+
+        <div class="poster-top-banner">
+          <span class="poster-ribbon-tag">✨ POSTER KESIMPULAN MATERI • PKWU KELAS X ✨</span>
+          <h2>MOTIF TO FASHION</h2>
+          <p>Jelajah Kreativitas Ragam Hias Nusantara Menuju Produk Fesyen Bernilai Jual</p>
         </div>
 
-        <div class="rangkuman-section-card card-navy">
-          <div class="rangkuman-sec-header">
-            <span class="rangkuman-sec-icon icon-navy">🎨</span>
-            <h3>1. Pengenalan Ragam Hias &amp; Filosofi</h3>
+        <div class="poster-motif-strip">
+          <div class="motif-mini-badge">
+            <svg width="36" height="28" viewBox="0 0 60 40" style="animation: cloudDrift 3s ease-in-out infinite;">
+              <path d="M10,30 Q15,12 30,20 Q45,12 50,30 Z" fill="#1e3a6e" stroke="#23140c" stroke-width="2.5"/>
+              <path d="M16,28 Q22,18 30,23 Q38,18 44,28 Z" fill="#6eb6ff"/>
+            </svg>
+            <span>Mega Mendung</span>
           </div>
-          <div class="rangkuman-sub-box">
-            <strong class="sub-title-navy">Batik Mega Mendung, Parang, Kawung &amp; Tenun Ikat:</strong>
-            <p>Mengenal ragam hias Nusantara yang sarat nilai luhur seperti kesabaran, semangat pantang menyerah, kesucian hati, dan identitas budaya.</p>
+          <div class="motif-mini-badge">
+            <svg width="36" height="28" viewBox="0 0 60 40">
+              <path d="M8,32 Q22,10 34,22 T52,10" fill="none" stroke="#8f291c" stroke-width="6" stroke-linecap="round"/>
+              <path d="M8,32 Q22,10 34,22 T52,10" fill="none" stroke="#ffd53d" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <span>Batik Parang</span>
           </div>
-        </div>
-
-        <div class="rangkuman-section-card card-gold">
-          <div class="rangkuman-sec-header">
-            <span class="rangkuman-sec-icon icon-gold">✂️</span>
-            <h3>2. Perancangan Sketsa &amp; Desain Fesyen</h3>
+          <div class="motif-mini-badge">
+            <svg width="36" height="28" viewBox="0 0 60 40" style="animation: spinSlow 14s linear infinite;">
+              <ellipse cx="30" cy="11" rx="4" ry="7" fill="#ffd53d" stroke="#23140c" stroke-width="2"/>
+              <ellipse cx="30" cy="29" rx="4" ry="7" fill="#ffd53d" stroke="#23140c" stroke-width="2"/>
+              <ellipse cx="20" cy="20" rx="7" ry="4" fill="#ffd53d" stroke="#23140c" stroke-width="2"/>
+              <ellipse cx="40" cy="20" rx="7" ry="4" fill="#ffd53d" stroke="#23140c" stroke-width="2"/>
+              <circle cx="30" cy="20" r="3" fill="#8f291c"/>
+            </svg>
+            <span>Batik Kawung</span>
           </div>
-          <div class="rangkuman-sub-box">
-            <strong class="sub-title-gold">Transformasi Menjadi Produk Modern:</strong>
-            <p>Mengubah motif tradisional menjadi produk fesyen bernilai jual tinggi seperti Outer Kimono Kasual, Gaun A-Line, dan Totebag Kanvas.</p>
-          </div>
-        </div>
-
-        <div class="rangkuman-section-card card-maroon">
-          <div class="rangkuman-sec-header">
-            <span class="rangkuman-sec-icon icon-maroon">🧵</span>
-            <h3>3. Bahan, Alat &amp; Teknik Produksi</h3>
-          </div>
-          <div class="rangkuman-sub-box">
-            <strong class="sub-title-maroon">Pemilihan Material &amp; Teknik:</strong>
-            <p>Menggunakan katun/sutra berkualitas serta menguasai 4 teknik utama: Membatik, Menyulam, Mencetak, dan Aplikasi Menempel.</p>
-          </div>
-        </div>
-
-        <div class="rangkuman-section-card card-green">
-          <div class="rangkuman-sec-header">
-            <span class="rangkuman-sec-icon icon-green">🏆</span>
-            <h3>4. Kewirausahaan, Kuis &amp; Expo Pameran</h3>
-          </div>
-          <div class="rangkuman-sub-box">
-            <strong class="sub-title-green">HPP, Kuis Kreatif &amp; Pameran Karya:</strong>
-            <p>Menghitung kalkulasi modal &amp; HPP usaha, menguji pemahaman lewat kuis interaktif, serta menampilkan karya di Expo Nusantara.</p>
+          <div class="motif-mini-badge">
+            <svg width="36" height="28" viewBox="0 0 60 40">
+              <polygon points="30,6 46,20 30,34 14,20" fill="#148348" stroke="#23140c" stroke-width="2.5"/>
+              <polygon points="30,12 39,20 30,28 21,20" fill="#ffd53d"/>
+            </svg>
+            <span>Tenun Ikat NTT</span>
           </div>
         </div>
 
-        <button type="button" class="rangkuman-done-btn" onclick="closeRangkumanModal()">
-          ✔ Tutup &amp; Selesai Membaca
-        </button>
+        <div class="poster-cards-grid">
+          <div class="poster-step-card step-navy">
+            <div class="poster-step-head">
+              <span class="step-num-circle" style="background:#142347; color:#ffd53d;">1</span>
+              <h3>Filosofi Ragam Hias Nusantara</h3>
+            </div>
+            <div class="poster-step-body">
+              <strong>Makna Luhur di Balik Pola:</strong> Setiap motif membawa nilai filosofis—kesabaran (<em>Mega Mendung</em>), pantang menyerah (<em>Parang</em>), kesucian diri (<em>Kawung</em>), hingga ketekunan (<em>Tenun Ikat</em>).
+            </div>
+          </div>
 
+          <div class="poster-step-card step-gold">
+            <div class="poster-step-head">
+              <span class="step-num-circle" style="background:#ffd53d; color:#23140c;">2</span>
+              <h3>Transformasi Desain Modern</h3>
+            </div>
+            <div class="poster-step-body">
+              <strong>Inovasi Produk Fesyen:</strong> Mengadaptasi wastra tradisi ke dalam siluet modern yang diminati pasar muda seperti <em>Outer Kasual</em>, <em>Gaun Modern</em>, <em>Totebag Kanvas</em>, dan aksesoris etnik.
+            </div>
+          </div>
+
+          <div class="poster-step-card step-maroon">
+            <div class="poster-step-head">
+              <span class="step-num-circle" style="background:#8f291c; color:#ffffff;">3</span>
+              <h3>Material &amp; 4 Teknik Produksi</h3>
+            </div>
+            <div class="poster-step-body">
+              <strong>Kualitas &amp; Keterampilan:</strong> Memilih bahan katun/sutra/kanvas terbaik serta menguasai 4 teknik utama: <strong>Membatik</strong>, <strong>Menyulam</strong>, <strong>Mencetak</strong>, dan <strong>Aplikasi Menempel</strong>.
+            </div>
+          </div>
+
+          <div class="poster-step-card step-green">
+            <div class="poster-step-head">
+              <span class="step-num-circle" style="background:#148348; color:#ffffff;">4</span>
+              <h3>Kewirausahaan &amp; Promosi</h3>
+            </div>
+            <div class="poster-step-body">
+              <strong>Strategi Bisnis Kreatif:</strong> Menghitung modal (HPP) dan margin laba secara tepat, serta memasarkan produk lewat <em>storytelling</em> nilai budaya di pameran Expo Nusantara.
+            </div>
+          </div>
+        </div>
+
+        <div class="poster-formula-banner">
+          <div>
+            <strong style="font-size:0.9rem; color:#23140c; display:block;">💡 Rumus Kunci Kewirausahaan Fesyen:</strong>
+            <span style="font-size:0.8rem; font-weight:700; color:#4a2511;">Pastikan harga jual menutup seluruh biaya produksi &amp; menghasilkan laba wajar.</span>
+          </div>
+          <div class="poster-formula-pill">
+            Harga Jual = HPP (Bahan + Alat) + Laba (%)
+          </div>
+        </div>
+
+        <div class="poster-bottom-credit">
+          <span>🏫 SMA Negeri 9 Luwu Timur</span>
+          <span>👩‍🏫 Guru: Ibu Aldriana Lobo</span>
+          <span>🎨 Tokoh: Raka, Nabila, &amp; Dimas</span>
+        </div>
+
+        <div class="poster-bottom-actions">
+          <button type="button" class="poster-btn-print" onclick="window.print()">
+            🖨 Cetak / Simpan Poster PDF
+          </button>
+          <button type="button" class="poster-btn-done" onclick="closeRangkumanModal()">
+            ✔ Tutup Poster
+          </button>
+        </div>
       </div>
     </div>
   `;
