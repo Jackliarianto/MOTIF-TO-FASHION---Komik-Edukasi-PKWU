@@ -149,7 +149,7 @@ function renderFooterFeatureScrollbar() {
   const siteFooter = document.querySelector(".site-footer");
   if (!siteFooter) return;
 
-  // Pastikan elemen footer memiliki styling posisi yang menempel & rapi di bawah
+  // Mengatur gaya posisi footer agar selalu menempel rapi di bawah layar
   siteFooter.style.position = "sticky";
   siteFooter.style.bottom = "0";
   siteFooter.style.zIndex = "999";
@@ -219,36 +219,15 @@ function renderFooterFeatureScrollbar() {
     </div>
   `;
 
-  // Otomatis menggeser barisan tombol di footer agar tombol halaman yang sedang aktif selalu berada di tengah pandangan
+  // Menggeser barisan tombol di footer secara otomatis agar tombol halaman aktif (termasuk hal 8, 9, 10) selalu tersorot di tengah
   setTimeout(() => {
     const activeBtn = document.getElementById(`footer-btn-${currentPageIndex}`);
     const scrollContainer = document.getElementById("footerScrollContainer");
     if (activeBtn && scrollContainer) {
-      const scrollLeftPos = activeBtn.offsetLeft - scrollContainer.offsetWidth / 2 + activeBtn.offsetWidth / 2;
+      const scrollLeftPos = activeBtn.offsetLeft - (scrollContainer.offsetWidth / 2) + (activeBtn.offsetWidth / 2);
       scrollContainer.scrollTo({ left: scrollLeftPos, behavior: 'smooth' });
     }
-  }, 50);
-}
-
-  siteFooter.innerHTML = `
-    <div style="width: 100%; max-width: 820px; margin: 0 auto; padding: 4px 10px; box-sizing: border-box;">
-      <div style="
-        display: flex; 
-        gap: 6px; 
-        overflow-x: auto; 
-        white-space: nowrap; 
-        padding: 4px 2px 6px 2px; 
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        justify-content: flex-start;
-        align-items: center;
-      ">
-        ${buttonsHTML}
-      </div>
-    </div>
-  `;
+  }, 60);
 }
 
 function renderDaftarHalamanModal() {
